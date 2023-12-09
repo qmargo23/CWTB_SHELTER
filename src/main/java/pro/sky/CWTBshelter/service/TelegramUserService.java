@@ -64,13 +64,4 @@ public class TelegramUserService {
     public TelegramUser update(TelegramUser telegramUser) {
         return repository.save(telegramUser);
     }
-
-    /**
-     * Deletes the transferred telegram user from the database
-     *
-     * @param telegramUser telegram user to delete
-     */
-    public void remove(TelegramUser telegramUser) {
-        repository.delete(telegramUser);
-    }
 }
