@@ -13,5 +13,6 @@ CREATE TABLE "animal"
     id                  BIGSERIAL           PRIMARY KEY,
     type_animal         varchar(255)        NOT NULL,
     breed               varchar(255),
-    in_shelter          boolean
+    in_shelter          boolean,
+    health              boolean
 )

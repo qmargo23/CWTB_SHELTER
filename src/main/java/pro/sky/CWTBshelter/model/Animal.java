@@ -5,14 +5,14 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 /**
- * класс Animal - сущность описывающая питомца.
- * Содержит пустой конструктор, геттеры, сеттеры,
- * переопределны equals, hashCode и toString
- * содержит следующие поля:
- * id           - идентификатор питомца;
- * typeAnimal   - тип животного (кошка или собака)
- * breed        - порода (если нет, то указывается без породы)
- * inShelter    - принимает значение true если животное находится в приюте, иначе false
+ * Сущность описывающая питомца.
+ * <i>содержит следующие поля:</i><br>
+ * <br>
+ *- id             (идентификатор питомца);<br>
+ *- typeAnimal     (тип животного, кошка или собака)<br>
+ *- breed          (порода если нет, то указывается без породы)<br>
+ *- inShelter      (принимает значение {@code true} если животное находится в приюте, иначе {@code false})<br>
+ *- health         (принимает значение {@code true} если животное здорово, иначе {@code false})<br>
  */
 @Entity
 @Table(name = "animal")
@@ -24,6 +24,8 @@ public class Animal {
     private String typeAnimal;
     private String breed;
     private Boolean inShelter;
+    private Boolean health;
+
 
     public Animal() {
     }
@@ -41,7 +43,8 @@ public class Animal {
     }
 
     public void setTypeAnimal(String typeAnimal) {
-        this.typeAnimal = typeAnimal;
+        //значения в нижнем регистре
+        this.typeAnimal = typeAnimal.toLowerCase();
     }
 
     public String getBreed() {
@@ -49,7 +52,8 @@ public class Animal {
     }
 
     public void setBreed(String breed) {
-        this.breed = breed;
+        //значения в нижнем регистре
+        this.breed = breed.toLowerCase();
     }
 
     public Boolean getInShelter() {
@@ -58,6 +62,14 @@ public class Animal {
 
     public void setInShelter(Boolean inShelter) {
         this.inShelter = inShelter;
+    }
+
+    public Boolean getHealth() {
+        return health;
+    }
+
+    public void setHealth(Boolean health) {
+        this.health = health;
     }
 
     @Override
