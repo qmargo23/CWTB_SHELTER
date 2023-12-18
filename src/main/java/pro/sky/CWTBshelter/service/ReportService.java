@@ -1,86 +1,45 @@
 package pro.sky.CWTBshelter.service;
 
-import org.springframework.stereotype.Service;
 import pro.sky.CWTBshelter.model.Report;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-@Service
-public class ReportService {
-    private final Map<Long, Report> reportMap;
 
-    public ReportService() {
-        reportMap = new HashMap<>();
-    }
-
+public interface ReportService {
     /**
-     * Создает новый отчет и добавляет его в map отчетов.
+     * Создает новый отчет.
      *
-     * @param report отчет, который будет создан
+     * @param report отчет, который нужно создать
      * @return созданный отчет
      */
-    public Report createReport(Report report) {
-        long id = generateId();
-        report.setId(id);
-        reportMap.put(id, report);
-        return report;
-    }
+    Report createReport(Report report);
 
     /**
-     * Извлекает отчет по его идентификатору.
+     * Получает отчет по его идентификатору.
      *
-     * @param id идентификатор отчета, который нужно получить.
-     * @return Отчет с указанным идентификатором или null, если он не существует.
+     * @param id Идентификатор отчета, который требуется получить.
+     * @return Отчет с указанным идентификатором.
      */
-    public Report getReportById(long id) {
-        return reportMap.get(id);
-    }
+
+    Report getReportById(long id);
 
     /**
-     * Возвращает список всех отчетов.
-     *
      * @return список всех отчетов
      */
-    public List<Report> getAllReports() {
-        return new ArrayList<>(reportMap.values());
-    }
+    List<Report> getAllReports();
+
     /**
-     * Обновляет данный отчет в Map отчетов.
+     * Обновляет данный отчет.
      *
-     * @param  report отчет для обновления
-     * @return  обновленный отчет
+     * @param report Отчет, который необходимо обновить.
+     * @return Обновленный отчет.
      */
-    public Report updateReport(Report report) {
-        long id = report.getId();
-        if (reportMap.containsKey(id)) {
-            reportMap.put(id, report);
-            return report;
-        } else {
-            throw new IllegalArgumentException("Отчет с идентификатором " + id + " не существует");
-        }
-    }
+    Report updateReport(Report report);
+
     /**
-     * Удаляет отчет с указанным идентификатором из отчетов.
+     * Удаляет отчет по его идентификатору.
      *
-     * @param id идентификатор удаляемого отчета
-     * @throws IllegalArgumentException, если отчет с указанным идентификатором не существует
+     * @param id — идентификатор удаляемого отчета.
+     * @return true, если отчет был успешно удален, в противном случае — false
      */
-    public boolean deleteReportById(long id) {
-        if (reportMap.containsKey(id)) {
-            reportMap.remove(id);
-            return true;
-        } else {
-            throw new IllegalArgumentException("Отчет с идентификатором " + id + " не существует");
-        }
-    }
-    /**
-     * Генерирует уникальный идентификатор.
-     *
-     * @return  сгенерированный идентификатор.
-     */
-    private int generateId() {
-        return 0;
-    }
+    boolean deleteReportById(long id);
 }
