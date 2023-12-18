@@ -24,7 +24,7 @@ import java.util.Objects;
  * <br>
  * documents                    - документы питомника
  * <br>
- * transportationAdvice         - советы по транспорту
+ * transportationAdvice         - советы по транспортировке животных
  * <br>
  * houseRulesForSmallAnimal     - правила содержания для детенышей
  * <br>
