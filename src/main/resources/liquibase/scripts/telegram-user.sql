@@ -6,3 +6,4 @@ CREATE TABLE telegram_user (
     chat_id BIGINT NOT NULL,
     bot_state SMALLINT NOT NULL
 )
+
