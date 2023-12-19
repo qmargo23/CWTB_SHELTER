@@ -46,7 +46,7 @@ public class BotUpdatesListener implements UpdatesListener {
         for (Update update : updates) {
             TelegramUser telegramUser = telegramUserService.findByChatId(update.message().chat().id());
             if (telegramUser == null) {
-                telegramUser = telegramUserService.add(update.message().chat().id(), defaultBotState);
+                telegramUser = telegramUserService.add(update.message().chat().id(), defaultBotState, null); // FIXME: заменить null на нового юзера
             }
             BotState botState = telegramUser.getBotState();
             BotState nextBotState = handlerMap.get(botState).handle(update); // Обрабатываем обновление

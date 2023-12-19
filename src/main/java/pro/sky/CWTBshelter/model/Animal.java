@@ -8,11 +8,11 @@ import java.util.Objects;
  * Сущность описывающая питомца.
  * <i>содержит следующие поля:</i><br>
  * <br>
- *- id             (идентификатор питомца);<br>
- *- typeAnimal     (тип животного, кошка или собака)<br>
- *- breed          (порода если нет, то указывается без породы)<br>
- *- inShelter      (принимает значение {@code true} если животное находится в приюте, иначе {@code false})<br>
- *- health         (принимает значение {@code true} если животное здорово, иначе {@code false})<br>
+ * - id             (идентификатор питомца);<br>
+ * - typeAnimal     (тип животного, кошка или собака)<br>
+ * - breed          (порода если нет, то указывается без породы)<br>
+ * - inShelter      (принимает значение {@code true} если животное находится в приюте, иначе {@code false})<br>
+ * - health         (принимает значение {@code true} если животное здорово, иначе {@code false})<br>
  */
 @Entity
 @Table(name = "animal")
@@ -25,6 +25,9 @@ public class Animal {
     private String breed;
     private Boolean inShelter;
     private Boolean health;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shelter_user_id")
+    private ShelterUser shelterUser;
 
 
     public Animal() {
@@ -70,6 +73,14 @@ public class Animal {
 
     public void setHealth(Boolean health) {
         this.health = health;
+    }
+
+    public ShelterUser getShelterUser() {
+        return shelterUser;
+    }
+
+    public void setShelterUser(ShelterUser shelterUser) {
+        this.shelterUser = shelterUser;
     }
 
     @Override

@@ -1,6 +1,10 @@
 databaseChangeLog:
   - include:
+      file: liquibase/scripts/shelter-user.sql
+  - include:
       file: liquibase/scripts/telegram-user.sql
+  - include:
+      file: liquibase/scripts/animal.sql
   - include:
       file: liquibase/scripts/telegram-shelter-info.sql
   - include:
