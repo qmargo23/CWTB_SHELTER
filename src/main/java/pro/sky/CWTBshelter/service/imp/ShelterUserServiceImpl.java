@@ -6,6 +6,8 @@ import pro.sky.CWTBshelter.model.ShelterUser;
 import pro.sky.CWTBshelter.repository.ShelterUserRepository;
 import pro.sky.CWTBshelter.service.ShelterUserService;
 
+import java.util.List;
+
 @Service
 public class ShelterUserServiceImpl implements ShelterUserService {
     private final ShelterUserRepository repository;
@@ -17,6 +19,11 @@ public class ShelterUserServiceImpl implements ShelterUserService {
     @Override
     public ShelterUser findById(Long id) {
         return repository.findById(id).orElseThrow(ShelterUserNotFoundException::new);
+    }
+
+    @Override
+    public List<ShelterUser> findAll() {
+        return repository.findAll();
     }
 
     @Override

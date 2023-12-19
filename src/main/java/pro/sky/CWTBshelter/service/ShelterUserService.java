@@ -2,6 +2,8 @@ package pro.sky.CWTBshelter.service;
 
 import pro.sky.CWTBshelter.model.ShelterUser;
 
+import java.util.List;
+
 public interface ShelterUserService {
     /**
      * Возвращает пользователя приюта по его id
@@ -10,6 +12,13 @@ public interface ShelterUserService {
      * @return найденный пользователь приюта
      */
     ShelterUser findById(Long id);
+
+    /**
+     * Возвращает всех пользователей приюта
+     *
+     * @return список пользователей приюта
+     */
+    List<ShelterUser> findAll();
 
     /**
      * Добавляет пользователя приюта в базу данных
