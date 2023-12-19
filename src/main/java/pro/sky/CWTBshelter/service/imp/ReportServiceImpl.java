@@ -1,9 +1,11 @@
-package pro.sky.CWTBshelter.service;
+package pro.sky.CWTBshelter.service.imp;
 
 import org.springframework.stereotype.Service;
 import pro.sky.CWTBshelter.model.Report;
 import pro.sky.CWTBshelter.repository.ReportRepository;
 import pro.sky.CWTBshelter.exception.ReportNotFoundException;
+import pro.sky.CWTBshelter.service.ReportService;
+
 import java.util.List;
 
 @Service
