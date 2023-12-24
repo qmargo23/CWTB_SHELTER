@@ -100,4 +100,58 @@ public class ShelterInfoController {
         }
         return ResponseEntity.ok(shelters);
     }
+    // Методы Коли
+    @GetMapping("/car-pass/contact")
+    @Operation(summary = "getContactForCarPass МЕТОД: Получить контакт для получения пропуска на автомобиль.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Контактное лицо для получения пропуска на автомобиль", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Контакт не найден"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getContactForCarPass() {
+        String contact = shelterInfoService.getContactForCarPass();
+        if (contact != null) {
+            return ResponseEntity.ok(contact);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/documents")
+    @Operation(summary = "getDocuments МЕТОД: Получить документы необходимые для того, чтобы взять животное из приюта")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Документы получены", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Документы не найдены"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getDocuments() {
+        String documents = shelterInfoService.getDocuments();
+        if (documents != null) {
+            return ResponseEntity.ok(documents);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/transportation-advice")
+    @Operation(summary = "Get transportation advice МЕТОД: Получение рекомендаций по транспортировке питомца")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Рекомендации по транспортировке получены", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Рекомендации по транспортировке не найдены"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getTransportationAdvice() {
+        String transportationAdvice = shelterInfoService.getTransportationAdvice();
+        if (transportationAdvice != null) {
+            return ResponseEntity.ok(transportationAdvice);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
+

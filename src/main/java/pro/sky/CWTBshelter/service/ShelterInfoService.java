@@ -47,4 +47,25 @@ public interface ShelterInfoService {
      * @return список объектов класса {@link ShelterInfo}
      */
     List<ShelterInfo> getAllShelters();
+
+    // Методы Коли
+    /**
+     * Извлекает контактную информацию для автомобильного пропуска.
+     *
+     * @return Контактная информация автомобильного пропуска.
+     */
+    String getContactForCarPass();
+    /**
+     * Возвращает документы.
+     *
+     * @return документы в виде строки.
+     */
+    String getDocuments();
+    /**
+     * Получение рекомендаций по транспортировке.
+     *
+     * @return Консультации по транспортировке.
+     */
+    String getTransportationAdvice();
+
 }

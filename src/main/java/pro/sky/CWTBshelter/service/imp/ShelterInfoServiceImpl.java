@@ -55,4 +55,31 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
     public List<ShelterInfo> getAllShelters() {
         return shelterInfoRepository.findAll();
     }
+
+    // Методы Коли
+    @Override
+    public String getContactForCarPass() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getContactForCarPass();
+        }
+        return null;
+}
+
+    @Override
+    public String getDocuments() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getDocuments();
+        }
+        return null;
+    }
+    @Override
+    public String getTransportationAdvice() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getTransportationAdvice();
+        }
+        return null;
+    }
 }
