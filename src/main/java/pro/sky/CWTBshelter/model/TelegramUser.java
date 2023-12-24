@@ -17,13 +17,18 @@ public class TelegramUser {
     @Column(name = "bot_state")
     private BotState botState;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shelter_user_id")
+    private ShelterUser shelterUser;
+
     public TelegramUser() {
     }
 
-    public TelegramUser(Long id, Long chatId, BotState botState) {
+    public TelegramUser(Long id, Long chatId, BotState botState, ShelterUser shelterUser) {
         this.id = id;
         this.chatId = chatId;
         this.botState = botState;
+        this.shelterUser = shelterUser;
     }
 
     public Long getId() {
@@ -48,6 +53,14 @@ public class TelegramUser {
 
     public void setBotState(BotState botState) {
         this.botState = botState;
+    }
+
+    public ShelterUser getShelterUser() {
+        return shelterUser;
+    }
+
+    public void setShelterUser(ShelterUser shelterUser) {
+        this.shelterUser = shelterUser;
     }
 
     @Override

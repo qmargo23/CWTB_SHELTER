@@ -2,6 +2,7 @@ package pro.sky.CWTBshelter.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.CWTBshelter.model.BotState;
+import pro.sky.CWTBshelter.model.ShelterUser;
 import pro.sky.CWTBshelter.model.TelegramUser;
 import pro.sky.CWTBshelter.repository.TelegramUserRepository;
 
@@ -51,8 +52,8 @@ public class TelegramUserService {
      * @param botState the bot state
      * @return the added {@link TelegramUser}
      */
-    public TelegramUser add(Long chatId, BotState botState) {
-        return repository.save(new TelegramUser(null, chatId, botState));
+    public TelegramUser add(Long chatId, BotState botState, ShelterUser shelterUser) {
+        return repository.save(new TelegramUser(null, chatId, botState, shelterUser));
     }
 
     /**
