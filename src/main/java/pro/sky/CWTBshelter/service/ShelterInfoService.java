@@ -47,4 +47,24 @@ public interface ShelterInfoService {
      * @return список объектов класса {@link ShelterInfo}
      */
     List<ShelterInfo> getAllShelters();
+    //методы Мирослава
+
+    /**
+     * Извлекает рекомендации по первому знакомству с питомцем
+     * @return Рекомендации по первому знакомству с питомцем
+     */
+    String getFirstMeetRecommendation();
+
+    /**
+     * Возвращает причины отказа
+     * @return Причины по которым отказано в том что бы оставить у себя питомца
+     */
+    String getRefuseReasons();
+
+    /**
+     * Возвращает правила безопасности
+     * @return Правила безопасности на территории приюта
+     */
+    String getSafetyOnTerritory();
+
 }
