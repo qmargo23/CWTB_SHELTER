@@ -25,12 +25,16 @@ public class Animal {
     private String breed;
     private Boolean inShelter;
     private Boolean health;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelter_user_id")
-    private ShelterUser shelterUser;
-
 
     public Animal() {
+    }
+
+    public Animal(Long id, String typeAnimal, String breed, Boolean inShelter, Boolean health) {
+        this.id = id;
+        this.typeAnimal = typeAnimal;
+        this.breed = breed;
+        this.inShelter = inShelter;
+        this.health = health;
     }
 
     public long getId() {
@@ -73,14 +77,6 @@ public class Animal {
 
     public void setHealth(Boolean health) {
         this.health = health;
-    }
-
-    public ShelterUser getShelterUser() {
-        return shelterUser;
-    }
-
-    public void setShelterUser(ShelterUser shelterUser) {
-        this.shelterUser = shelterUser;
     }
 
     @Override
