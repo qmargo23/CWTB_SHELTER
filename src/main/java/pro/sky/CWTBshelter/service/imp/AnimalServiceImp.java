@@ -36,7 +36,7 @@ public class AnimalServiceImp implements AnimalService {
             throw new AnimalNotFoundException();
         }
     }
-
+    //DELETE
     @Override
     public boolean deleteAnimalById(Long id) {
         if (animalRepository.findById(id).isPresent()) {
@@ -47,9 +47,6 @@ public class AnimalServiceImp implements AnimalService {
         }
     }
 
-    //вывод всех питомцев приюта
-    //возможно в дальнейшем нужна будет сортирока по typeAnimal
-    //
     @Override
     public List<Animal> getAllAnimals() {
         return animalRepository.findAll();

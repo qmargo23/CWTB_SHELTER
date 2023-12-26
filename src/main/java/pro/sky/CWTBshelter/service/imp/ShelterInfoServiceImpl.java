@@ -55,4 +55,22 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
     public List<ShelterInfo> getAllShelters() {
         return shelterInfoRepository.findAll();
     }
+
+
+    @Override
+    public String getAboutShelter() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getAboutShelter();
+        }
+        return null;
+    }
+    @Override
+    public String getAddressShelter() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getAddressSchedule();
+        }
+        return null;
+    }
 }

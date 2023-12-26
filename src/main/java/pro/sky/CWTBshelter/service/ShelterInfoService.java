@@ -47,4 +47,15 @@ public interface ShelterInfoService {
      * @return список объектов класса {@link ShelterInfo}
      */
     List<ShelterInfo> getAllShelters();
+    /**
+     * Вывод общей информации о приюте.
+     * @return Общая информация о приюте.
+     */
+    String getAboutShelter();
+    /**
+     * Вывод расписания работы и адрес приюта.
+     * @return Расписание работы и адрес приюта.
+     */
+    String getAddressShelter();
+
 }
