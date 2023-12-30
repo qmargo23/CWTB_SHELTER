@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pro.sky.CWTBshelter.exception.ShelterInfoNotFoundException;
 import pro.sky.CWTBshelter.model.ShelterInfo;
 import pro.sky.CWTBshelter.repository.ShelterInfoRepository;
 import pro.sky.CWTBshelter.service.imp.ShelterInfoServiceImpl;
@@ -74,14 +75,49 @@ public class ShelterInfoServiceTest {
 
     @Test
     void findShelterInfoById() {
+        ShelterInfo expected =  new ShelterInfo(1L,"Про приют","Адрес",
+                "Номер телефона","Безопасность на территории",
+                "Знакомство","Документы",
+                "Рекомендации к транспортировке",
+                "Для маленьких","Для больших",
+                "С особенностями","Рекомендации",
+                "Кинолог","Отказы");
+        ShelterInfo actual = shelterInfoService.findShelterInfoById(1L);
+        Assertions.assertEquals(actual,expected);
     }
 
     @Test
     void editShelterInfo() {
+        ShelterInfo expected =  new ShelterInfo(1L,"Про приют","Адрес",
+                "Номер телефона","Безопасность на территории",
+                "Знакомство","Документы",
+                "Рекомендации к транспортировке",
+                "Для маленьких","Для больших",
+                "С особенностями","Рекомендации",
+                "Кинолог","Отказы");
+        ShelterInfo shelterInfoTest =  new ShelterInfo(1L,"Про приют","Адрес",
+                "Номер телефона","Безопасность на территории",
+                "Знакомство","Документы",
+                "Рекомендации к транспортировке",
+                "Для маленьких","Для больших",
+                "С особенностями","Рекомендации",
+                "Кинолог","Отказы");
+        when(shelterInfoRepository.save(shelterInfoTest)).thenReturn(new ShelterInfo(1L,"Про приют","Адрес",
+                "Номер телефона","Безопасность на территории",
+                "Знакомство","Документы",
+                "Рекомендации к транспортировке",
+                "Для маленьких","Для больших",
+                "С особенностями","Рекомендации",
+                "Кинолог","Отказы"));
+        ShelterInfo actual = shelterInfoService.editShelterInfo(shelterInfoTest);
+        Assertions.assertEquals(actual,expected);
+
     }
 
     @Test
     void deleteShelterInfoById() {
+        Assertions.assertThrows(ShelterInfoNotFoundException.class,
+                ()->shelterInfoService.deleteShelterInfoById(2L));
     }
 
     @Test
@@ -128,6 +164,18 @@ public class ShelterInfoServiceTest {
     void getSafetyOnTerritory() {
         String actual = shelterInfoService.getSafetyOnTerritory();
         String expected = "Безопасность на территории";
+        Assertions.assertEquals(actual,expected);
+    }
+    @Test
+    void getAboutShelter(){
+        String actual = shelterInfoService.getAboutShelter();
+        String expected = "Про приют";
+        Assertions.assertEquals(actual,expected);
+    }
+    @Test
+    void getAddressShelter(){
+        String actual = shelterInfoService.getAddressShelter();
+        String expected = "Адрес";
         Assertions.assertEquals(actual,expected);
     }
 }

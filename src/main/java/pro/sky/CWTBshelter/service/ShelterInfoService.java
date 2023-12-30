@@ -67,4 +67,7 @@ public interface ShelterInfoService {
      */
     String getSafetyOnTerritory();
 
+    String getAboutShelter();
+
+    String getAddressShelter();
 }
