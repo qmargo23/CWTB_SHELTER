@@ -17,7 +17,7 @@ public class TelegramUser {
     @Column(name = "bot_state")
     private BotState botState;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "shelter_user_id")
     private ShelterUser shelterUser;
 
@@ -60,7 +60,17 @@ public class TelegramUser {
     }
 
     public void setShelterUser(ShelterUser shelterUser) {
+        ShelterUser oldShelterUser = this.shelterUser;
+        if (oldShelterUser == shelterUser) {
+            return;
+        }
         this.shelterUser = shelterUser;
+        if (oldShelterUser != null) {
+            oldShelterUser.setTelegramUser(null);
+        }
+        if (shelterUser != null) {
+            shelterUser.setTelegramUser(this);
+        }
     }
 
     @Override
