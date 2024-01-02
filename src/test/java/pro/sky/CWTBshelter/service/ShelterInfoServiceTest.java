@@ -178,4 +178,22 @@ public class ShelterInfoServiceTest {
         String expected = "Адрес";
         Assertions.assertEquals(actual,expected);
     }
+    @Test
+    void getContactForCarPass(){
+        String actual = shelterInfoService.getContactForCarPass();
+        String expected = "Номер телефона";
+        Assertions.assertEquals(actual,expected);
+    }
+    @Test
+    void getDocuments(){
+        String actual = shelterInfoService.getDocuments();
+        String expected  = "Документы";
+        Assertions.assertEquals(actual,expected);
+    }
+    @Test
+    void getTransportationAdvice(){
+        String actual = shelterInfoService.getTransportationAdvice();
+        String expected = "Рекомендации к транспортировке";
+        Assertions.assertEquals(actual,expected);
+    }
 }

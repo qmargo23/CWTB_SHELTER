@@ -198,4 +198,35 @@ class ShelterInfoControllerTest {
                 .andExpect(status().isOk());
         verify(shelterInfoService, only()).getAddressShelter();
     }
+
+    @Test
+    @DisplayName("Вывод контакта для получения пропуска на авто")
+    void getContactForCarPass() throws Exception {
+        when(shelterInfoService.getContactForCarPass()).thenReturn("Номер телефона");
+        mvc.perform(MockMvcRequestBuilders.get("/shelter/car-pass/contact",
+                        shelterInfoTest.getContactForCarPass()))
+                .andExpect(content().string(containsString("Номер телефона")))
+                .andExpect(status().isOk());
+        verify(shelterInfoService, only()).getContactForCarPass();
+    }
+    @Test
+    @DisplayName("Вывод документов, необходимых что бы взять животное из приюта")
+    void getDocuments() throws Exception {
+        when(shelterInfoService.getDocuments()).thenReturn("Документы");
+        mvc.perform(MockMvcRequestBuilders.get("/shelter/documents",
+                        shelterInfoTest.getDocuments()))
+                .andExpect(content().string(containsString("Документы")))
+                .andExpect(status().isOk());
+        verify(shelterInfoService, only()).getDocuments();
+    }
+    @Test
+    @DisplayName("Вывод советов для транспортировки")
+    void getTransportationAdvice() throws Exception {
+        when(shelterInfoService.getTransportationAdvice()).thenReturn("Рекомендации к транспортировке");
+        mvc.perform(MockMvcRequestBuilders.get("/shelter/transportation-advice",
+                        shelterInfoTest.getTransportationAdvice()))
+                .andExpect(content().string(containsString("Рекомендации к транспортировке")))
+                .andExpect(status().isOk());
+        verify(shelterInfoService, only()).getTransportationAdvice();
+    }
 }

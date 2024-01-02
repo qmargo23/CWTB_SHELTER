@@ -70,4 +70,10 @@ public interface ShelterInfoService {
     String getAboutShelter();
 
     String getAddressShelter();
+
+    String getContactForCarPass();
+
+    String getDocuments();
+
+    String getTransportationAdvice();
 }

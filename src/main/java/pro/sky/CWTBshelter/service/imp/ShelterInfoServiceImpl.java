@@ -99,6 +99,33 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
         }
         return null;
     }
+    @Override
+    public String getContactForCarPass() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getContactForCarPass();
+        }
+        return null;
+    }
+
+    @Override
+    public String getDocuments() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getDocuments();
+        }
+        return null;
+    }
+    @Override
+    public String getTransportationAdvice() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getTransportationAdvice();
+        }
+        return null;
+    }
 }
+
+
 
 
