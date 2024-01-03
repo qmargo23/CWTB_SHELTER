@@ -1,8 +1,7 @@
 package pro.sky.CWTBshelter.model;
 
 import jakarta.persistence.*;
-
-import java.util.Objects;
+import lombok.*;
 
 /**
  * Сущность описывающая питомца.
@@ -14,10 +13,15 @@ import java.util.Objects;
  * - inShelter      (принимает значение {@code true} если животное находится в приюте, иначе {@code false})<br>
  * - health         (принимает значение {@code true} если животное здорово, иначе {@code false})<br>
  */
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "animal")
 public class Animal {
-
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,24 +29,13 @@ public class Animal {
     private String breed;
     private Boolean inShelter;
     private Boolean health;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelter_user_id")
-    private ShelterUser shelterUser;
 
-
-    public Animal() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public Animal(Long id, String typeAnimal, String breed, Boolean inShelter, Boolean health) {
         this.id = id;
-    }
-
-    public String getTypeAnimal() {
-        return typeAnimal;
+        setTypeAnimal(typeAnimal);
+        setBreed(breed);
+        this.inShelter = inShelter;
+        this.health = health;
     }
 
     public void setTypeAnimal(String typeAnimal) {
@@ -50,58 +43,8 @@ public class Animal {
         this.typeAnimal = typeAnimal.toLowerCase();
     }
 
-    public String getBreed() {
-        return breed;
-    }
-
     public void setBreed(String breed) {
         //значения в нижнем регистре
         this.breed = breed.toLowerCase();
-    }
-
-    public Boolean getInShelter() {
-        return inShelter;
-    }
-
-    public void setInShelter(Boolean inShelter) {
-        this.inShelter = inShelter;
-    }
-
-    public Boolean getHealth() {
-        return health;
-    }
-
-    public void setHealth(Boolean health) {
-        this.health = health;
-    }
-
-    public ShelterUser getShelterUser() {
-        return shelterUser;
-    }
-
-    public void setShelterUser(ShelterUser shelterUser) {
-        this.shelterUser = shelterUser;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Animal animal)) return false;
-        return id == animal.id && Objects.equals(typeAnimal, animal.typeAnimal) && Objects.equals(breed, animal.breed) && Objects.equals(inShelter, animal.inShelter);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, typeAnimal, breed, inShelter);
-    }
-
-    @Override
-    public String toString() {
-        return "Animal{" +
-                "id=" + id +
-                ", typeAnimal='" + typeAnimal + '\'' +
-                ", breed='" + breed + '\'' +
-                ", inShelter=" + inShelter +
-                '}';
     }
 }
