@@ -1,5 +1,6 @@
 package pro.sky.CWTBshelter.service;
 
+import pro.sky.CWTBshelter.dto.ShelterUserDTO;
 import pro.sky.CWTBshelter.model.ShelterUser;
 
 import java.util.List;
@@ -11,30 +12,31 @@ public interface ShelterUserService {
      * @param id уникальный идентификатор пользователя приюта
      * @return найденный пользователь приюта
      */
-    ShelterUser findById(Long id);
+    ShelterUser findShelterUserById(Long id);
 
     /**
      * Возвращает всех пользователей приюта
      *
      * @return список пользователей приюта
      */
-    List<ShelterUser> findAll();
+    List<ShelterUser> getAllShelterUsers();
 
     /**
      * Добавляет пользователя приюта в базу данных
      *
-     * @param shelterUser пользователь, которого нужно добавить
+     * @param request пользователь, которого нужно добавить
      * @return добавленный пользователь
      */
-    ShelterUser add(ShelterUser shelterUser);
+    ShelterUser createShelterUser(ShelterUserDTO.Request.Create request);
 
     /**
      * Сохраняет обновленную информацию о пользователе приюта в базу данных
      *
-     * @param shelterUser обновленная информация о пользователе
+     * @param id      идентификатор пользователя
+     * @param request обновленная информация о пользователе
      * @return измененный пользователь
      */
-    ShelterUser update(ShelterUser shelterUser);
+    ShelterUser updateShelterUser(Long id, ShelterUserDTO.Request.Create request);
 
     /**
      * Удаляет пользователя приюта по id из базы данных

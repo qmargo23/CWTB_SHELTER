@@ -1,9 +1,11 @@
 package pro.sky.CWTBshelter.service.imp;
 
 import org.springframework.stereotype.Service;
+import pro.sky.CWTBshelter.dto.ReportDTO;
+import pro.sky.CWTBshelter.dto.mapper.ReportDTOMapper;
+import pro.sky.CWTBshelter.exception.ReportNotFoundException;
 import pro.sky.CWTBshelter.model.Report;
 import pro.sky.CWTBshelter.repository.ReportRepository;
-import pro.sky.CWTBshelter.exception.ReportNotFoundException;
 import pro.sky.CWTBshelter.service.ReportService;
 
 import java.util.List;
@@ -11,21 +13,23 @@ import java.util.List;
 @Service
 public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
+    private final ReportDTOMapper reportDTOMapper;
 
-    public ReportServiceImpl(ReportRepository reportRepository) {
+    public ReportServiceImpl(ReportRepository reportRepository, ReportDTOMapper reportDTOMapper) {
         this.reportRepository = reportRepository;
-
+        this.reportDTOMapper = reportDTOMapper;
     }
+
     /**
      * Создает отчет и сохраняет его в репозитории.
      *
-     * @param report Отчет, который необходимо создать и сохранить.
+     * @param request Отчет, который необходимо создать и сохранить.
      * @return Созданный отчет.
      */
     @Override
-    public Report createReport(Report report) {
-        reportRepository.save(report);
-        return report;
+    public Report createReport(ReportDTO.Request.Create request) {
+        Report report = reportDTOMapper.toReport(request);
+        return reportRepository.save(report);
     }
 
     /**
@@ -53,22 +57,21 @@ public class ReportServiceImpl implements ReportService {
     /**
      * Обновляет отчет в репозитории.
      *
-     * @param report Отчет, который необходимо обновить.
+     * @param request Отчет, который необходимо обновить.
      * @return Обновленный отчет.
      * @throws ReportNotFoundException, если отчет с указанным идентификатором не найден.
      */
     @Override
-    public Report updateReport(Report report) {
-        if (reportRepository.findById(report.getId()).isPresent()) {
-            reportRepository.save(report);
-            return report;
-        } else {
-            throw new ReportNotFoundException();
-        }
+    public Report updateReport(Long id, ReportDTO.Request.Create request) {
+        Report report = reportRepository.findById(id).orElseThrow(ReportNotFoundException::new);
+        report.setPhoto(request.getPhoto());
+        report.setLocalDate(request.getLocalDate());
+        report.setReportTextUnderPhoto(report.getReportTextUnderPhoto());
+        return reportRepository.save(report);
     }
 
     /**
-     *Удаляет отчет по его идентификатору.
+     * Удаляет отчет по его идентификатору.
      *
      * @param id Идентификатор удаляемого отчета.
      * @return True, если отчет успешно удален, в противном случае — false.

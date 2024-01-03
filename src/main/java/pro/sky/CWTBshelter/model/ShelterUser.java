@@ -24,16 +24,33 @@ public class ShelterUser {
     @Column(name = "adopt_date")
     private LocalDate adoptDate;
 
-    @OneToOne(mappedBy = "shelterUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "shelterUser", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+    })
     private TelegramUser telegramUser;
 
-    @OneToOne(mappedBy = "shelterUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "shelterUser", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+    })
     private Animal animal;
 
     @Column(name = "type")
     private ShelterUserType type;
 
     public ShelterUser() {
+    }
+
+    public ShelterUser(Long id, String name, String surname, String phoneNumber, LocalDate adoptDate, TelegramUser telegramUser, Animal animal, ShelterUserType type) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.adoptDate = adoptDate;
+        this.telegramUser = telegramUser;
+        this.animal = animal;
+        this.type = type;
     }
 
     public Long getId() {
@@ -81,7 +98,17 @@ public class ShelterUser {
     }
 
     public void setTelegramUser(TelegramUser telegramUser) {
+        TelegramUser oldTelegramUser = this.telegramUser;
+        if (oldTelegramUser == telegramUser) {
+            return;
+        }
         this.telegramUser = telegramUser;
+        if (oldTelegramUser != null) {
+            oldTelegramUser.setShelterUser(null);
+        }
+        if (telegramUser != null) {
+            telegramUser.setShelterUser(this);
+        }
     }
 
     public Animal getAnimal() {
@@ -89,7 +116,17 @@ public class ShelterUser {
     }
 
     public void setAnimal(Animal animal) {
+        Animal oldAnimal = this.animal;
+        if (oldAnimal == animal) {
+            return;
+        }
         this.animal = animal;
+        if (oldAnimal != null) {
+            oldAnimal.setShelterUser(null);
+        }
+        if (animal != null) {
+            animal.setShelterUser(this);
+        }
     }
 
     public ShelterUserType getType() {
