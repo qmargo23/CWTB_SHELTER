@@ -1,9 +1,11 @@
 package pro.sky.CWTBshelter.dto.mapper;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import pro.sky.CWTBshelter.dto.ShelterInfoDTO;
 import pro.sky.CWTBshelter.model.ShelterInfo;
 
+@NoArgsConstructor
 @Component
 public class ShelterInfoDTOMapper {
     public ShelterInfoDTO.Response.Detail toDetailDTO(ShelterInfo shelterInfo) {

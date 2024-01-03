@@ -3,11 +3,11 @@ package pro.sky.CWTBshelter.service.imp;
 import org.springframework.stereotype.Service;
 import pro.sky.CWTBshelter.dto.ShelterUserDTO;
 import pro.sky.CWTBshelter.dto.mapper.ShelterUserDTOMapper;
-import pro.sky.CWTBshelter.exception.*;
-import pro.sky.CWTBshelter.model.Animal;
+import pro.sky.CWTBshelter.exception.BadTelegramUserIdException;
+import pro.sky.CWTBshelter.exception.ShelterUserNotFoundException;
+import pro.sky.CWTBshelter.exception.TelegramUserNotFound;
 import pro.sky.CWTBshelter.model.ShelterUser;
 import pro.sky.CWTBshelter.model.TelegramUser;
-import pro.sky.CWTBshelter.repository.AnimalRepository;
 import pro.sky.CWTBshelter.repository.ShelterUserRepository;
 import pro.sky.CWTBshelter.repository.TelegramUserRepository;
 import pro.sky.CWTBshelter.service.ShelterUserService;
@@ -20,18 +20,15 @@ import java.util.regex.Pattern;
 public class ShelterUserServiceImpl implements ShelterUserService {
     private final ShelterUserRepository shelterUserRepository;
     private final TelegramUserRepository telegramUserRepository;
-    private final AnimalRepository animalRepository;
     private final ShelterUserDTOMapper shelterUserDTOMapper;
 
     public ShelterUserServiceImpl(
             ShelterUserRepository shelterUserRepository,
             TelegramUserRepository telegramUserRepository,
-            AnimalRepository animalRepository,
             ShelterUserDTOMapper shelterUserDTOMapper
     ) {
         this.shelterUserRepository = shelterUserRepository;
         this.telegramUserRepository = telegramUserRepository;
-        this.animalRepository = animalRepository;
         this.shelterUserDTOMapper = shelterUserDTOMapper;
     }
 
@@ -51,9 +48,6 @@ public class ShelterUserServiceImpl implements ShelterUserService {
         if (request.getTelegramUser() != null) {
             setShelterUserTelegramUserById(shelterUser, request.getTelegramUser());
         }
-        if (request.getAnimal() != null) {
-            setShelterUserAnimalById(shelterUser, request.getAnimal());
-        }
         return shelterUserRepository.save(shelterUser);
     }
 
@@ -70,18 +64,12 @@ public class ShelterUserServiceImpl implements ShelterUserService {
         } else {
             shelterUser.setTelegramUser(null);
         }
-        if (request.getAnimal() != null) {
-            setShelterUserAnimalById(shelterUser, request.getAnimal());
-        } else {
-            shelterUser.setAnimal(null);
-        }
         return shelterUserRepository.save(shelterUser);
     }
 
     @Override
     public void removeById(Long id) {
         ShelterUser shelterUser = shelterUserRepository.findById(id).orElseThrow(ShelterUserNotFoundException::new);
-        shelterUser.setAnimal(null);
         shelterUser.setTelegramUser(null);
         shelterUserRepository.save(shelterUser);
         shelterUserRepository.deleteById(id);
@@ -95,13 +83,6 @@ public class ShelterUserServiceImpl implements ShelterUserService {
         shelterUser.setTelegramUser(telegramUser);
     }
 
-    private void setShelterUserAnimalById(ShelterUser shelterUser, Long id) {
-        Animal animal = animalRepository.findById(id).orElseThrow(AnimalNotFoundException::new);
-        if (animal.getShelterUser() != null && !animal.getShelterUser().equals(shelterUser)) {
-            throw new BadAnimalIdException();
-        }
-        shelterUser.setAnimal(animal);
-    }
     @Override
     public boolean setPhoneNumber(Long id, String phoneNumber) {
         String regex = "^((\\+7|7|8)+([0-9]){10})$";
@@ -109,10 +90,10 @@ public class ShelterUserServiceImpl implements ShelterUserService {
         Matcher matcher = pattern.matcher(phoneNumber);
 
         if (matcher.matches()) {
-            ShelterUser shelterUser = repository.findById(id).orElse(null);
+            ShelterUser shelterUser = shelterUserRepository.findById(id).orElse(null);
             if (shelterUser != null) {
                 shelterUser.setPhoneNumber(phoneNumber);
-                repository.save(shelterUser);
+                shelterUserRepository.save(shelterUser);
                 return true;
             }
         }

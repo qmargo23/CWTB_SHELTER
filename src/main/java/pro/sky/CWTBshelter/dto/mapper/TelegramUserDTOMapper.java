@@ -1,10 +1,12 @@
 package pro.sky.CWTBshelter.dto.mapper;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import pro.sky.CWTBshelter.dto.TelegramUserDTO;
 import pro.sky.CWTBshelter.model.ShelterUser;
 import pro.sky.CWTBshelter.model.TelegramUser;
 
+@NoArgsConstructor
 @Component
 public class TelegramUserDTOMapper {
     public TelegramUserDTO.Response.Detail toDetailDTO(TelegramUser telegramUser) {

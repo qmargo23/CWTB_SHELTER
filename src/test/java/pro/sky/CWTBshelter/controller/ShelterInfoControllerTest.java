@@ -7,21 +7,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import pro.sky.CWTBshelter.dto.ShelterInfoDTO;
+import pro.sky.CWTBshelter.dto.mapper.ShelterInfoDTOMapper;
 import pro.sky.CWTBshelter.model.ShelterInfo;
 import pro.sky.CWTBshelter.service.ShelterInfoService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,10 +32,20 @@ class ShelterInfoControllerTest {
     private MockMvc mvc;
     @MockBean
     private ShelterInfoService shelterInfoService;
+    @SpyBean
+    private ShelterInfoDTOMapper shelterInfoDTOMapper;
     @Autowired
     private ObjectMapper objectMapper;
 
     static ShelterInfo shelterInfoTest = new ShelterInfo(1L, "Про приют", "Адрес",
+            "Номер телефона", "Безопасность на территории",
+            "Знакомство", "Документы",
+            "Рекомендации к транспортировке",
+            "Для маленьких", "Для больших",
+            "С особенностями", "Рекомендации",
+            "Кинолог", "Отказы");
+
+    static ShelterInfoDTO.Request.Create requestTest = new ShelterInfoDTO.Request.Create("Про приют", "Адрес",
             "Номер телефона", "Безопасность на территории",
             "Знакомство", "Документы",
             "Рекомендации к транспортировке",
@@ -59,7 +69,7 @@ class ShelterInfoControllerTest {
     @Test
     @DisplayName("Добавление приюта")
     void addShelterInfo() throws Exception {
-        when(shelterInfoService.createShelterInfo(shelterInfoTest)).thenReturn(shelterInfoTest);
+        when(shelterInfoService.createShelterInfo(requestTest)).thenReturn(shelterInfoTest);
 
         mvc.perform(MockMvcRequestBuilders.post("/shelter")
                         .content(objectMapper.writeValueAsString(shelterInfoTest))
@@ -80,7 +90,7 @@ class ShelterInfoControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.refuseReasons").value("Отказы"))
                 .andExpect(status().isOk());
 
-        verify(shelterInfoService, only()).createShelterInfo(shelterInfoTest);
+        verify(shelterInfoService, only()).createShelterInfo(requestTest);
 
 
     }
@@ -97,9 +107,9 @@ class ShelterInfoControllerTest {
     @Test
     @DisplayName("Редактирование приюта")
     void editShelterInfo() throws Exception {
-        when(shelterInfoService.editShelterInfo(shelterInfoTest)).thenReturn(shelterInfoTest);
+        when(shelterInfoService.editShelterInfo(1L, requestTest)).thenReturn(shelterInfoTest);
 
-        mvc.perform(MockMvcRequestBuilders.put("/shelter")
+        mvc.perform(MockMvcRequestBuilders.put("/shelter/1")
                         .content(objectMapper.writeValueAsString(shelterInfoTest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
@@ -118,7 +128,7 @@ class ShelterInfoControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.refuseReasons").value("Отказы"))
                 .andExpect(status().isOk());
 
-        verify(shelterInfoService, only()).editShelterInfo(shelterInfoTest);
+        verify(shelterInfoService, only()).editShelterInfo(1L, requestTest);
 
     }
 
@@ -127,7 +137,7 @@ class ShelterInfoControllerTest {
     void deleteShelterInfo() throws Exception {
         when(shelterInfoService.deleteShelterInfoById(anyLong())).thenReturn(true);
         mvc.perform(delete("/shelter/{id}", anyLong()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -209,6 +219,7 @@ class ShelterInfoControllerTest {
                 .andExpect(status().isOk());
         verify(shelterInfoService, only()).getContactForCarPass();
     }
+
     @Test
     @DisplayName("Вывод документов, необходимых что бы взять животное из приюта")
     void getDocuments() throws Exception {
@@ -219,6 +230,7 @@ class ShelterInfoControllerTest {
                 .andExpect(status().isOk());
         verify(shelterInfoService, only()).getDocuments();
     }
+
     @Test
     @DisplayName("Вывод советов для транспортировки")
     void getTransportationAdvice() throws Exception {

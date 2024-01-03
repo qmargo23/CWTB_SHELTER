@@ -18,15 +18,6 @@ CREATE TABLE shelter_info
     cynologists varchar,
     refuse_reasons varchar
 )
--- changeset mir:2
-INSERT INTO shelter_info (about_shelter, address_schedule, contact_for_car_pass, safety_on_territory,first_meet_recommendation,
-documents, transportation_advice, house_rules_for_small_animal,house_rules_for_adult_animal,rules_for_animal_with_disability,
-cynologist_advice,cynologists,refuse_reasons)
-
-'паспорт','необходимо иметь клетку','необходимо иметь 3-х дневный запас еды возможно молока для малыша',
-'необходим выгул и сбалансированный рацион','необходимо посещение ветеринара раз в месяц в течении полугода',
-'Следует учитывать, что воспитательная дрессировка щенка и дрессировка взрослой особи сильно отличаются. Воспитанием следует заниматься вскоре после рождения, наиболее подходящий возраст – 3,5 — 4 месяца.',
-'Сабуров Нурлан Азаматович тел.2-222-222 ', ' При ненадлежащем уходе животное будет изъято')
 -- changeset qMargo:2
 INSERT INTO shelter_info (about_shelter, address_schedule, contact_for_car_pass, safety_on_territory,first_meet_recommendation,
 documents, transportation_advice, house_rules_for_small_animal,house_rules_for_adult_animal,rules_for_animal_with_disability,
