@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(name = "photo")
     private String photo;
     @Column(name = "local_date")
@@ -21,7 +21,7 @@ public class Report {
     public Report() {
     }
 
-    public Report(long id, String photo, LocalDate localDate, String reportTextUnderPhoto) {
+    public Report(Long id, String photo, LocalDate localDate, String reportTextUnderPhoto) {
         this.id = id;
         this.photo = photo;
         this.localDate = localDate;
@@ -59,6 +59,7 @@ public class Report {
     public void setReportTextUnderPhoto(String reportTextUnderPhoto) {
         this.reportTextUnderPhoto = reportTextUnderPhoto;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

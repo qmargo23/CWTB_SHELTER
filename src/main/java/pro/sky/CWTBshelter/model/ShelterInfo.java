@@ -63,7 +63,22 @@ public class ShelterInfo {
     public ShelterInfo() {
     }
 
-    public ShelterInfo(Long id, String aboutShelter, String addressSchedule, String contactForCarPass, String safetyOnTerritory, String firstMeetRecommendation, String documents, String transportationAdvice, String houseRulesForSmallAnimal, String houseRulesForAdultAnimal, String rulesForAnimalWithDisability, String cynologistAdvice, String cynologists, String refuseReasons) {
+    public ShelterInfo(
+            Long id,
+            String aboutShelter,
+            String addressSchedule,
+            String contactForCarPass,
+            String safetyOnTerritory,
+            String firstMeetRecommendation,
+            String documents,
+            String transportationAdvice,
+            String houseRulesForSmallAnimal,
+            String houseRulesForAdultAnimal,
+            String rulesForAnimalWithDisability,
+            String cynologistAdvice,
+            String cynologists,
+            String refuseReasons
+    ) {
         this.id = id;
         this.aboutShelter = aboutShelter;
         this.addressSchedule = addressSchedule;
@@ -206,7 +221,7 @@ public class ShelterInfo {
     }
 
     @Override
-    public String   toString() {
+    public String toString() {
         return "ShelterInfo{" +
                 "id=" + id +
                 ", aboutShelter='" + aboutShelter + '\'' +
