@@ -42,4 +42,12 @@ public interface ShelterUserService {
      * @param id идентификатор пользователя, которого нужно удалить
      */
     void removeById(Long id);
+    // Методы Коли
+    /**
+     * Устанавливает номер телефона для заданного идентификатора.
+     *
+     * @param id Идентификатор пользователя.
+     * @param phoneNumber Номер телефона, который необходимо установить.
+     */
+    boolean setPhoneNumber(Long id,String phoneNumber);
 }

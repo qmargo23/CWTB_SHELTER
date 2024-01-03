@@ -92,4 +92,19 @@ public class ShelterUserController {
         service.removeById(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{id}/phone-number")
+    @Operation(summary = "Задать номер телефона для пользователя приюта", description = "Введите номер телефона")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Номер телефона задан успешно"),
+            @ApiResponse(responseCode = "400", description = "Некорректный номер телефона"),
+            @ApiResponse(responseCode = "404", description = "Пользователь приюта не найден")
+    })
+    public ResponseEntity<Void> setPhoneNumber(@PathVariable Long id, @RequestParam String phoneNumber) {
+        boolean success = service.setPhoneNumber(id, phoneNumber);
+        if (success) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
