@@ -1,5 +1,6 @@
 package pro.sky.CWTBshelter.service;
 
+import pro.sky.CWTBshelter.dto.ReportDTO;
 import pro.sky.CWTBshelter.model.Report;
 
 import java.util.List;
@@ -8,10 +9,10 @@ public interface ReportService {
     /**
      * Создает новый отчет.
      *
-     * @param report отчет, который нужно создать
+     * @param request отчет, который нужно создать
      * @return созданный отчет
      */
-    Report createReport(Report report);
+    Report createReport(ReportDTO.Request.Create request);
 
     /**
      * Получает отчет по его идентификатору.
@@ -30,10 +31,10 @@ public interface ReportService {
     /**
      * Обновляет данный отчет.
      *
-     * @param report Отчет, который необходимо обновить.
+     * @param request Отчет, который необходимо обновить.
      * @return Обновленный отчет.
      */
-    Report updateReport(Report report);
+    Report updateReport(Long id, ReportDTO.Request.Create request);
 
     /**
      * Удаляет отчет по его идентификатору.

@@ -26,15 +26,17 @@ public class Animal {
     private Boolean inShelter;
     private Boolean health;
 
+
     public Animal() {
     }
 
-    public Animal(Long id, String typeAnimal, String breed, Boolean inShelter, Boolean health) {
+
         this.id = id;
         this.typeAnimal = typeAnimal;
         this.breed = breed;
         this.inShelter = inShelter;
         this.health = health;
+
     }
 
     public long getId() {
@@ -78,6 +80,7 @@ public class Animal {
     public void setHealth(Boolean health) {
         this.health = health;
     }
+
 
     @Override
     public boolean equals(Object o) {

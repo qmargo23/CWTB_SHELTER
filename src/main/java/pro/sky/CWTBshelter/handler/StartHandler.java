@@ -5,15 +5,15 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Component;
 import pro.sky.CWTBshelter.model.BotState;
-import pro.sky.CWTBshelter.service.TelegramUserService;
+import pro.sky.CWTBshelter.service.imp.TelegramUserServiceImpl;
 
 @Component
 public class StartHandler implements Handler {
     private final TelegramBot bot;
-    private final TelegramUserService telegramUserService;
+    private final TelegramUserServiceImpl telegramUserService;
     private final String helloMessageText = "Привет! Я бот такой-то, умею делать то-то.";
 
-    public StartHandler(TelegramBot bot, TelegramUserService telegramUserService) {
+    public StartHandler(TelegramBot bot, TelegramUserServiceImpl telegramUserService) {
         this.bot = bot;
         this.telegramUserService = telegramUserService;
     }
