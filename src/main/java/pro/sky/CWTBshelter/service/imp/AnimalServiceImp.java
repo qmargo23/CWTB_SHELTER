@@ -4,12 +4,8 @@ import org.springframework.stereotype.Service;
 import pro.sky.CWTBshelter.dto.AnimalDTO;
 import pro.sky.CWTBshelter.dto.mapper.AnimalDTOMapper;
 import pro.sky.CWTBshelter.exception.AnimalNotFoundException;
-import pro.sky.CWTBshelter.exception.BadShelterUserIdException;
-import pro.sky.CWTBshelter.exception.ShelterUserNotFoundException;
 import pro.sky.CWTBshelter.model.Animal;
-import pro.sky.CWTBshelter.model.ShelterUser;
 import pro.sky.CWTBshelter.repository.AnimalRepository;
-import pro.sky.CWTBshelter.repository.ShelterUserRepository;
 import pro.sky.CWTBshelter.service.AnimalService;
 
 import java.util.List;
@@ -17,12 +13,10 @@ import java.util.List;
 @Service
 public class AnimalServiceImp implements AnimalService {
     private final AnimalRepository animalRepository;
-    private final ShelterUserRepository shelterUserRepository;
     private final AnimalDTOMapper animalDTOMapper;
 
-    public AnimalServiceImp(AnimalRepository animalRepository, ShelterUserRepository shelterUserRepository, AnimalDTOMapper animalDTOMapper) {
+    public AnimalServiceImp(AnimalRepository animalRepository, AnimalDTOMapper animalDTOMapper) {
         this.animalRepository = animalRepository;
-        this.shelterUserRepository = shelterUserRepository;
         this.animalDTOMapper = animalDTOMapper;
     }
 
@@ -30,12 +24,7 @@ public class AnimalServiceImp implements AnimalService {
     @Override
     public Animal createAnimal(AnimalDTO.Request.Create request) {
         Animal animal = animalDTOMapper.toAnimal(request);
-        animal = animalRepository.save(animal);
-        if (request.getShelterUser() != null) {
-            ShelterUser shelterUser = setAnimalShelterUserById(animal, request.getShelterUser());
-            shelterUserRepository.save(shelterUser);
-        }
-        return animal;
+        return animalRepository.save(animal);
     }
 
     //READ
@@ -52,20 +41,15 @@ public class AnimalServiceImp implements AnimalService {
         animal.setBreed(request.getBreed());
         animal.setHealth(request.getHealth());
         animal.setInShelter(request.getInShelter());
-        animalRepository.save(animal);
-        if (request.getShelterUser() != null) {
-            ShelterUser shelterUser = setAnimalShelterUserById(animal, request.getShelterUser());
-            shelterUserRepository.save(shelterUser);
-        } else {
-            animal.setShelterUser(null);
-        }
-        return animal;
+        return animalRepository.save(animal);
     }
+
     //DELETE
     @Override
     public boolean deleteAnimalById(Long id) {
-        Animal animal = animalRepository.findById(id).orElseThrow(AnimalNotFoundException::new);
-        animal.setShelterUser(null);
+        if (!animalRepository.existsById(id)) {
+            throw new AnimalNotFoundException();
+        }
         animalRepository.deleteById(id);
         return true;
     }
@@ -73,14 +57,5 @@ public class AnimalServiceImp implements AnimalService {
     @Override
     public List<Animal> getAllAnimals() {
         return animalRepository.findAll();
-    }
-
-    private ShelterUser setAnimalShelterUserById(Animal animal, Long id) {
-        ShelterUser shelterUser = shelterUserRepository.findById(id).orElseThrow(ShelterUserNotFoundException::new);
-        if (shelterUser.getAnimal() != null && !shelterUser.getAnimal().equals(animal)) {
-            throw new BadShelterUserIdException();
-        }
-        animal.setShelterUser(shelterUser);
-        return shelterUser;
     }
 }

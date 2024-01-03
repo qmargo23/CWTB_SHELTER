@@ -7,10 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import pro.sky.CWTBshelter.dto.AnimalDTO;
+import pro.sky.CWTBshelter.dto.mapper.AnimalDTOMapper;
 import pro.sky.CWTBshelter.model.Animal;
 import pro.sky.CWTBshelter.service.AnimalService;
 
@@ -29,11 +32,14 @@ class AnimalControllerTest {
     @MockBean
     private AnimalService animalService;
 
+    @SpyBean
+    private AnimalDTOMapper animalDTOMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     static Animal animalTest = new Animal(1L, "cat", "британец", true, true);
-
+    static AnimalDTO.Request.Create requestTest = new AnimalDTO.Request.Create("cat", "британец", true, true);
     List<Animal> list = new ArrayList<>(List.of(new Animal(1L, "DOG", "Овчарка", true, true),
             new Animal(2L, "cat", "рыжий", true, true),
             new Animal(3L, "dog", "шпиц", true, true)));
@@ -43,7 +49,7 @@ class AnimalControllerTest {
     @DisplayName("Добавление животного")
     void shouldReturnAnimalWhenAddUserCalled() throws Exception {
 
-        when(animalService.createAnimal(animalTest)).thenReturn(animalTest);
+        when(animalService.createAnimal(requestTest)).thenReturn(animalTest);
 
         mvc.perform(MockMvcRequestBuilders.post("/animal")
                         .content(objectMapper.writeValueAsString(animalTest))
@@ -55,7 +61,7 @@ class AnimalControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.health").value(true))
                 .andExpect(status().isOk());
 
-        verify(animalService, only()).createAnimal(animalTest);
+        verify(animalService, only()).createAnimal(requestTest);
     }
 
     @Test
@@ -72,9 +78,9 @@ class AnimalControllerTest {
     @DisplayName("Редактирование животного")
     void shouldReturnEditAnimalWhenEditAnimalCalled() throws Exception {
 
-        when(animalService.editAnimal(animalTest)).thenReturn(animalTest);
+        when(animalService.editAnimal(1L, requestTest)).thenReturn(animalTest);
 
-        mvc.perform(MockMvcRequestBuilders.put("/animal")
+        mvc.perform(MockMvcRequestBuilders.put("/animal/1")
                         .content(objectMapper.writeValueAsString(animalTest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
@@ -84,7 +90,7 @@ class AnimalControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.health").value(true))
                 .andExpect(status().isOk());
 
-        verify(animalService, only()).editAnimal(animalTest);
+        verify(animalService, only()).editAnimal(1L, requestTest);
     }
 
     @Test
@@ -92,7 +98,7 @@ class AnimalControllerTest {
     void shouldReturnOkWhenDeleteAnimalByIdCalled() throws Exception {
         when(animalService.deleteAnimalById(anyLong())).thenReturn(true);
         mvc.perform(delete("/animal/{id}", anyLong()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

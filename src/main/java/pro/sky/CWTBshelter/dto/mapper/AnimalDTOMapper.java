@@ -1,24 +1,23 @@
 package pro.sky.CWTBshelter.dto.mapper;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import pro.sky.CWTBshelter.dto.AnimalDTO;
 import pro.sky.CWTBshelter.model.Animal;
-import pro.sky.CWTBshelter.model.ShelterUser;
 
+@NoArgsConstructor
 @Component
 public class AnimalDTOMapper {
     public AnimalDTO.Response.Detail toDetailDTO(Animal animal) {
         if (animal == null) {
             return null;
         }
-        ShelterUser shelterUser = animal.getShelterUser();
         return new AnimalDTO.Response.Detail(
                 animal.getId(),
                 animal.getTypeAnimal(),
                 animal.getBreed(),
                 animal.getInShelter(),
-                animal.getHealth(),
-                (shelterUser != null) ? shelterUser.getId() : null
+                animal.getHealth()
         );
     }
 
@@ -42,8 +41,7 @@ public class AnimalDTOMapper {
                 dto.getTypeAnimal(),
                 dto.getBreed(),
                 dto.getInShelter(),
-                dto.getHealth(),
-                null
+                dto.getHealth()
         );
     }
 }

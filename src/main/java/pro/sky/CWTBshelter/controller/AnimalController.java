@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import pro.sky.CWTBshelter.dto.AnimalDTO;
 import pro.sky.CWTBshelter.dto.mapper.AnimalDTOMapper;
 import pro.sky.CWTBshelter.service.AnimalService;
-import pro.sky.CWTBshelter.service.ShelterUserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,12 +22,10 @@ import java.util.stream.Collectors;
 @Tag(name = "AnimalController", description = "CRUD-операции и другие эндпоинты для работы с животными")
 public class AnimalController {
     private final AnimalService animalService;
-    private final ShelterUserService shelterUserService;
     private final AnimalDTOMapper mapper;
 
-    public AnimalController(AnimalService animalService, ShelterUserService shelterUserService, AnimalDTOMapper mapper) {
+    public AnimalController(AnimalService animalService, AnimalDTOMapper mapper) {
         this.animalService = animalService;
-        this.shelterUserService = shelterUserService;
         this.mapper = mapper;
     }
 

@@ -3,6 +3,7 @@ package pro.sky.CWTBshelter.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pro.sky.CWTBshelter.model.ShelterUserType;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public enum ShelterUserDTO {
 
         @Schema(name = "ShelterUserCreate")
         @Data
+        @NoArgsConstructor
         @AllArgsConstructor
         public static final class Create {
             private String name;
@@ -22,7 +24,6 @@ public enum ShelterUserDTO {
             private String phoneNumber;
             private LocalDate adoptDate;
             private Long telegramUser;
-            private Long animal;
             private ShelterUserType type;
         }
     }
@@ -32,6 +33,7 @@ public enum ShelterUserDTO {
 
         @Schema(name = "ShelterUserDetail")
         @Data
+        @NoArgsConstructor
         @AllArgsConstructor
         public static final class Detail {
             private Long id;
@@ -40,12 +42,12 @@ public enum ShelterUserDTO {
             private String phoneNumber;
             private LocalDate adoptDate;
             private Long telegramUser;
-            private Long animal;
             private ShelterUserType type;
         }
 
         @Schema(name = "ShelterUserItem")
         @Data
+        @NoArgsConstructor
         @AllArgsConstructor
         public static final class Item {
             private Long id;

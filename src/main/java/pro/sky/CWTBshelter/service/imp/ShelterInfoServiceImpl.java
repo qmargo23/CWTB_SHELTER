@@ -71,6 +71,37 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
         return shelterInfoRepository.findAll();
     }
 
+
+    //методы Мирослава
+
+    @Override
+    public String getFirstMeetRecommendation() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getFirstMeetRecommendation();
+        }
+        return null;
+    }
+
+    @Override
+    public String getRefuseReasons() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1l).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getRefuseReasons();
+        }
+        return null;
+    }
+
+    @Override
+    public String getSafetyOnTerritory() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1l).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getSafetyOnTerritory();
+        }
+        return null;
+    }
+
+    @Override
     public String getAboutShelter() {
         ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
         if (shelterInfo != null) {
@@ -78,6 +109,7 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
         }
         return null;
     }
+
     @Override
     public String getAddressShelter() {
         ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
@@ -87,6 +119,33 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
         return null;
     }
 
+    // Методы Коли
+    @Override
+    public String getContactForCarPass() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getContactForCarPass();
+        }
+        return null;
+    }
+
+    @Override
+    public String getDocuments() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getDocuments();
+        }
+        return null;
+    }
+
+    @Override
+    public String getTransportationAdvice() {
+        ShelterInfo shelterInfo = shelterInfoRepository.findById(1L).orElse(null);
+        if (shelterInfo != null) {
+            return shelterInfo.getTransportationAdvice();
+        }
+        return null;
+    }
 }
 
 

@@ -3,6 +3,7 @@ package pro.sky.CWTBshelter.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public enum ShelterInfoDTO {
     ;
@@ -12,6 +13,7 @@ public enum ShelterInfoDTO {
 
         @Schema(name = "ShelterInfoCreate")
         @Data
+        @NoArgsConstructor
         @AllArgsConstructor
         public static final class Create {
             private String aboutShelter;
@@ -35,6 +37,7 @@ public enum ShelterInfoDTO {
 
         @Schema(name = "ShelterInfoDetail")
         @Data
+        @NoArgsConstructor
         @AllArgsConstructor
         public static final class Detail {
             private Long id;

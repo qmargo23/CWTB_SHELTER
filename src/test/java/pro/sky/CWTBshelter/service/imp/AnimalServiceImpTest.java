@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pro.sky.CWTBshelter.dto.AnimalDTO;
+import pro.sky.CWTBshelter.dto.mapper.AnimalDTOMapper;
 import pro.sky.CWTBshelter.exception.AnimalNotFoundException;
 import pro.sky.CWTBshelter.model.Animal;
 import pro.sky.CWTBshelter.repository.AnimalRepository;
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -22,24 +26,29 @@ import static org.mockito.Mockito.when;
 class AnimalServiceImpTest {
     @Mock
     private AnimalRepository animalRepository;
+
+    @Spy
+    private AnimalDTOMapper animalDTOMapper;
+
     @InjectMocks
     private AnimalServiceImp animalService;
 
-    Animal animal = new Animal(1L,"cat","британец",true,true);
+    Animal animal = new Animal(1L, "cat", "британец", true, true);
+    AnimalDTO.Request.Create request = new AnimalDTO.Request.Create("cat", "британец", true, true);
 
     public static final List<Animal> ANIMAL_LIST = List.of(
-            new Animal(2L,"cat","британец2",true,true),
-            new Animal(3L,"cat","британец3",true,true),
-            new Animal(4L,"cat","британец4",true,true)
+            new Animal(2L, "cat", "британец2", true, true),
+            new Animal(3L, "cat", "британец3", true, true),
+            new Animal(4L, "cat", "британец4", true, true)
     );
 
 
     @Test
     @DisplayName("Создание животного")
     void shouldReturnAnimalWhenCreateUserCalled() {
-        when(animalService.createAnimal(animal)).thenReturn(animal);
+        when(animalService.createAnimal(request)).thenReturn(animal);
 
-        assertEquals(animalService.createAnimal(animal), animal);
+        assertEquals(animalService.createAnimal(request), animal);
 
     }
 
@@ -49,8 +58,9 @@ class AnimalServiceImpTest {
     void shouldReturnAnimalWhenEditAnimalCalled() {
 
         when(animalRepository.findById(anyLong())).thenReturn(Optional.of(animal));
+        when(animalRepository.save(any())).thenReturn(animal);
 
-        Animal animal1 = animalService.editAnimal(animal);
+        Animal animal1 = animalService.editAnimal(1L, request);
 
         Assertions.assertThat(animal1).isEqualTo(animal);
     }
@@ -59,7 +69,7 @@ class AnimalServiceImpTest {
     @DisplayName("Удаление животного по его id")
     void shouldReturnTrueWhenDeleteAnimalByIdCalled() {
 
-        when(animalRepository.findById(anyLong())).thenReturn(Optional.of(animal));
+        when(animalRepository.existsById(anyLong())).thenReturn(true);
 
         assertTrue(animalService.deleteAnimalById(anyLong()));
     }
@@ -67,16 +77,17 @@ class AnimalServiceImpTest {
     @Test
     @DisplayName("Ошибка при удалении животного")
     void shouldReturnExceptionWhenDeleteAnimalByIdCalled() {
-        when(animalRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(animalRepository.existsById(anyLong())).thenReturn(false);
 
         assertThrows(AnimalNotFoundException.class, () -> animalService.deleteAnimalById(anyLong()));
     }
+
     @Test
     @DisplayName("Ошибка при редактировании животного")
     void shouldReturnExceptionWhenEditAnimalCalled() {
         when(animalRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(AnimalNotFoundException.class, () -> animalService.editAnimal(animal));
+        assertThrows(AnimalNotFoundException.class, () -> animalService.editAnimal(1L, request));
     }
 
     @Test
