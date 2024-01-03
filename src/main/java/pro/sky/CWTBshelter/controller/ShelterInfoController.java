@@ -39,7 +39,7 @@ public class ShelterInfoController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "МЕТОД getShelterInfoById: Получить информацию о питомнике по его id", description = "Введите id питомника")
+    @Operation(summary = "МЕТОД getShelterInfoById: Получить всю информацию о питомнике по его id", description = "Введите id питомника")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Информация о питомнике получена", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ShelterInfoDTO.Response.Detail.class)))}),
@@ -290,5 +290,41 @@ public class ShelterInfoController {
             return ResponseEntity.notFound().build();
         }
     }
+    //___________qMargo_______________________
+    @GetMapping("/aboutShelter")
+    @Operation(summary = "МЕТОД getAboutShelter: Получить описание приюта.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Описание приюта", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Приют не найден"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getAboutShelter() {
+        String infoAboutShelter = shelterInfoService.getAboutShelter();
+        if (infoAboutShelter != null) {
+            return ResponseEntity.ok(infoAboutShelter);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/getAddressSchedule")
+    @Operation(summary = "МЕТОД getAboutShelter: Получить адрес и время работы приюта.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Описание адреса и времени работы приюта", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Приют не найден"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getAddressShelter() {
+        String addressShelter = shelterInfoService.getAddressShelter();
+        if (addressShelter != null) {
+            return ResponseEntity.ok(addressShelter);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    //___________qMargo_______________________
 }
 
