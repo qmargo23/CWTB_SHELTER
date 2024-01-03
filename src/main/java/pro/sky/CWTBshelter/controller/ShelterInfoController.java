@@ -148,5 +148,147 @@ public class ShelterInfoController {
             return ResponseEntity.notFound().build();
         }
     }
+    //методы Мирослава
+
+    @GetMapping("/first-meet")
+    @Operation(summary = "getFirstMeetRecommendation Метод : Получить рекомендации при первом знакомстве с животным.")
+    @ApiResponses(value =
+            {@ApiResponse(responseCode = "200", description = "Рекомендация при первом знакомстве с животным",
+                    content = {
+                            @Content(mediaType = "text/plain", schema =
+                            @Schema(type = "string"))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Рекомендации не найдены"),
+                    @ApiResponse(responseCode = "500", description = "Произошла ошибка не зависящая от вызывающей стороны")})
+    public ResponseEntity<String> getFirstMeetRecommendation() {
+        String recommendation = shelterInfoService.getFirstMeetRecommendation();
+        if (recommendation != null){
+            return ResponseEntity.ok(recommendation);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/refuse-reasons")
+    @Operation(summary = "getRefuseReasons Метод : Причины по которым могут отказать и не дать забрать животное из приюта.")
+    @ApiResponses(value =
+            {@ApiResponse(responseCode = "200", description = "Причины по которым могут отказать и не дать забрать животное из приюта.",
+                    content = {
+                            @Content(mediaType = "text/plain", schema =
+                            @Schema(type = "string"))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Причины не найдены"),
+                    @ApiResponse(responseCode = "500", description = "Произошла ошибка не зависящая от вызывающей стороны")})
+    public ResponseEntity<String> getRefuseReasons() {
+        String reasons = shelterInfoService.getRefuseReasons();
+        if (reasons != null){
+            return ResponseEntity.ok(reasons);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/safety-on-territory")
+    @Operation(summary = "getSafetyOnTerritory Метод : Общие рекомендации по технике безопасности на территории приюта.")
+    @ApiResponses(value =
+            {@ApiResponse(responseCode = "200", description = "Общие рекомендации по технике безопасности на территории приюта.",
+                    content = {
+                            @Content(mediaType = "text/plain", schema =
+                            @Schema(type = "string"))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Рекомендации не найдены"),
+                    @ApiResponse(responseCode = "500", description = "Произошла ошибка не зависящая от вызывающей стороны")})
+    public ResponseEntity<String> getSafetyOnTerritory() {
+        String recommendation = shelterInfoService.getSafetyOnTerritory();
+        if (recommendation != null){
+            return ResponseEntity.ok(recommendation);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/aboutShelter")
+    @Operation(summary = "МЕТОД getAboutShelter: Получить описание приюта.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Описание приюта", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Приют не найден"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getAboutShelter() {
+        String infoAboutShelter = shelterInfoService.getAboutShelter();
+        if (infoAboutShelter != null) {
+            return ResponseEntity.ok(infoAboutShelter);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/getAddressSchedule")
+    @Operation(summary = "МЕТОД getAboutShelter: Получить адрес и время работы приюта.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Описание адреса и времени работы приюта", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Приют не найден"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getAddressShelter() {
+        String addressShelter = shelterInfoService.getAddressShelter();
+        if (addressShelter != null) {
+            return ResponseEntity.ok(addressShelter);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/car-pass/contact")
+    @Operation(summary = "getContactForCarPass МЕТОД: Получить контакт для получения пропуска на автомобиль.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Контактное лицо для получения пропуска на автомобиль", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Контакт не найден"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getContactForCarPass() {
+        String contact = shelterInfoService.getContactForCarPass();
+        if (contact != null) {
+            return ResponseEntity.ok(contact);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/documents")
+    @Operation(summary = "getDocuments МЕТОД: Получить документы необходимые для того, чтобы взять животное из приюта")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Документы получены", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Документы не найдены"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getDocuments() {
+        String documents = shelterInfoService.getDocuments();
+        if (documents != null) {
+            return ResponseEntity.ok(documents);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/transportation-advice")
+    @Operation(summary = "getTransportationAdvice МЕТОД: Получение рекомендаций по транспортировке питомца")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Рекомендации по транспортировке получены", content = {
+                    @Content(mediaType = "text/plain", schema = @Schema(type = "string"))
+            }),
+            @ApiResponse(responseCode = "404", description = "Рекомендации по транспортировке не найдены"),
+            @ApiResponse(responseCode = "500", description = "Произошла ошибка, не зависящая от вызывающей стороны")
+    })
+    public ResponseEntity<String> getTransportationAdvice() {
+        String transportationAdvice = shelterInfoService.getTransportationAdvice();
+        if (transportationAdvice != null) {
+            return ResponseEntity.ok(transportationAdvice);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
 
