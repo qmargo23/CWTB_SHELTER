@@ -31,13 +31,24 @@ public class MenuServiceImp implements MenuService {
 
     private final TelegramBot telegramBot;
     private final KeyboardUtil keyboardUtil;
+    private final ShelterInfoRepository shelterInfoRepository;
 
     public MenuServiceImp(TelegramBot telegramBot,
-                          KeyboardUtil keyboardUtil
-                          ) {
+                          KeyboardUtil keyboardUtil,
+                          ShelterInfoRepository shelterInfoRepository) {
         this.telegramBot = telegramBot;
         this.keyboardUtil = keyboardUtil;
+        this.shelterInfoRepository = shelterInfoRepository;
     }
+
+    private final String catMenuText = "Добро пожаловать в наш кошачий приют." +
+            "\n" +//можно добавить описание...
+            "\n На данном этапе вы можете выбрать:" +//можно добавить описание
+            "\n";//можно добавить описание...
+    private final String dogMenuText = "Добро пожаловать в наш собачий приют." +
+            "\n" +//можно добавить описание...
+            "\n На данном этапе вы можете выбрать:" +//можно добавить описание
+            "\n";//можно добавить описание...
 
     @Override
     public SendMessage getStartMenuShelter(Long chatId) {
@@ -48,7 +59,38 @@ public class MenuServiceImp implements MenuService {
         telegramBot.execute(sendMessage);
         return sendMessage;
     }
-//setButtonKeyboard понадобиться ТОЛЬКО для ПервогоСтарта
+
+    @Override
+    public SendMessage getCatMenu(Long chatId) {
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
+//                GET_SHELTER_MENU,
+//                ADOPT_MENU,
+//                REPORT_MENU,
+                HELP
+        );
+//нужен рефакторинг кода..проверка  get()
+        String shelter = shelterInfoRepository.findById(2L).get().getAboutShelter();
+        SendMessage sendMessage = new SendMessage(chatId, shelter + "\n" + "\n" + catMenuText)
+                .replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+        return sendMessage;
+    }
+
+    @Override
+    public SendMessage getDogMenu(Long chatId) {
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
+//                GET_SHELTER_MENU,
+//                ADOPT_MENU,
+//                REPORT_MENU,
+                HELP
+        );
+        String shelter = shelterInfoRepository.findById(1L).get().getAboutShelter();
+        SendMessage sendMessage = new SendMessage(chatId, shelter + "\n" + "\n" + dogMenuText)
+                .replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+        return sendMessage;
+    }
+
     public void setButtonKeyboard(Update update, String greetingFirstMessageText) {
 // создаем меню-клавиатуру, для быстрого доступа к данным о приюте
         Keyboard keyboard = new ReplyKeyboardMarkup(

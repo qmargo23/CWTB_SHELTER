@@ -15,6 +15,7 @@ import pro.sky.CWTBshelter.handler.StartHandler;
 import pro.sky.CWTBshelter.handler.WaitCommandHandler;
 import pro.sky.CWTBshelter.model.BotState;
 import pro.sky.CWTBshelter.service.imp.TelegramUserServiceImpl;
+import pro.sky.CWTBshelter.util.ButtonReactionService;
 import pro.sky.CWTBshelter.util.imp.HandlerServiceImpl;
 
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class BotUpdatesListener implements UpdatesListener {
     private final TelegramUserDTOMapper telegramUserDTOMapper;
     private final Logger logger = LoggerFactory.getLogger(BotUpdatesListener.class);
     private final HandlerServiceImpl updateHandler;
+    private final ButtonReactionService buttonReactionService;
 
     public BotUpdatesListener(
             TelegramBot bot,
@@ -37,11 +39,12 @@ public class BotUpdatesListener implements UpdatesListener {
             StartHandler startHandler,
             WaitCommandHandler waitCommandHandler,
             TelegramUserDTOMapper telegramUserDTOMapper,
-            HandlerServiceImpl updateHandler) {
+            HandlerServiceImpl updateHandler, ButtonReactionService buttonReactionService) {
         this.bot = bot;
         this.telegramUserService = telegramUserService;
         this.telegramUserDTOMapper = telegramUserDTOMapper;
         this.updateHandler = updateHandler;
+        this.buttonReactionService = buttonReactionService;
         handlerMap.put(BotState.START, startHandler);
         handlerMap.put(BotState.WAIT_COMMAND, waitCommandHandler);
     }
@@ -80,7 +83,7 @@ public class BotUpdatesListener implements UpdatesListener {
             updates.forEach(update -> {
                 logger.info("Handles update: {}", update);
                 if (update.callbackQuery() != null) {
-//вызвать методы класса  для обработки обратных запросов - при нажатии КНОПКИ
+                    buttonReactionService.buttonReaction(update.callbackQuery());
                 } else if (update.message().text() != null) {
                     updateHandler.messageHandler(update);// вызвать методы класса обрабатывающие  update.message().text() - когда введен ТЕКСТ
                 } else if (update.message().photo() != null || update.message().caption() != null) {
