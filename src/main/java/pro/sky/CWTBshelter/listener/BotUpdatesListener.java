@@ -3,30 +3,23 @@ package pro.sky.CWTBshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SetMyCommands;
-import com.pengrad.telegrambot.response.GetFileResponse;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import pro.sky.CWTBshelter.dto.TelegramUserDTO;
 import pro.sky.CWTBshelter.dto.mapper.TelegramUserDTOMapper;
 import pro.sky.CWTBshelter.handler.Handler;
 import pro.sky.CWTBshelter.handler.StartHandler;
 import pro.sky.CWTBshelter.handler.WaitCommandHandler;
 import pro.sky.CWTBshelter.model.BotState;
-import pro.sky.CWTBshelter.model.TelegramUser;
 import pro.sky.CWTBshelter.service.imp.TelegramUserServiceImpl;
+import pro.sky.CWTBshelter.util.imp.HandlerServiceImpl;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Component
 public class BotUpdatesListener implements UpdatesListener {
@@ -36,17 +29,19 @@ public class BotUpdatesListener implements UpdatesListener {
     private final BotState defaultBotState = BotState.START;
     private final TelegramUserDTOMapper telegramUserDTOMapper;
     private final Logger logger = LoggerFactory.getLogger(BotUpdatesListener.class);
+    private final HandlerServiceImpl updateHandler;
 
     public BotUpdatesListener(
             TelegramBot bot,
             TelegramUserServiceImpl telegramUserService,
             StartHandler startHandler,
             WaitCommandHandler waitCommandHandler,
-            TelegramUserDTOMapper telegramUserDTOMapper
-    ) {
+            TelegramUserDTOMapper telegramUserDTOMapper,
+            HandlerServiceImpl updateHandler) {
         this.bot = bot;
         this.telegramUserService = telegramUserService;
         this.telegramUserDTOMapper = telegramUserDTOMapper;
+        this.updateHandler = updateHandler;
         handlerMap.put(BotState.START, startHandler);
         handlerMap.put(BotState.WAIT_COMMAND, waitCommandHandler);
     }
@@ -87,7 +82,7 @@ public class BotUpdatesListener implements UpdatesListener {
                 if (update.callbackQuery() != null) {
 //вызвать методы класса  для обработки обратных запросов - при нажатии КНОПКИ
                 } else if (update.message().text() != null) {
-// вызвать методы класса обрабатывающие  update.message().text() - когда введен ТЕКСТ
+                    updateHandler.messageHandler(update);// вызвать методы класса обрабатывающие  update.message().text() - когда введен ТЕКСТ
                 } else if (update.message().photo() != null || update.message().caption() != null) {
 // вызвать методы класса обрабатывающие ФОТО, ВИДЕО иди ДОКУМЕНТЫ
                 }
