@@ -58,7 +58,11 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
                 return menuService.getDogMenu(chatId);//создадим сообщение для приюта dog
             case HELP:
                 return messageSender.sendMessage(chatId, "Воспользуйтесь командой /help");
-
+            case ADOPT_MENU:
+                if (isCat) {
+                    return menuService.getCatAdoptMenu(chatId);
+                }
+                return menuService.getDogAdoptMenu(chatId);
 
             default:
                 return messageSender.sendMessage(chatId, "КОД ЭТОЙ КНОПКИ ЕЩЕ НЕ НАПИСАН");
