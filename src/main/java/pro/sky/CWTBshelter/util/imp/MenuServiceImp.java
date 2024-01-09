@@ -22,6 +22,9 @@ import static pro.sky.CWTBshelter.init.CallbackDataRequest.*;
 @Service
 public class MenuServiceImp implements MenuService {
     private final String startText = "Для начала работы надо выбрать приют.";//текст выбора приюта
+    private final String adoptText = "Усыновление питомца на данном этапе возможно только через волонтера.";// TODO: 09.01.2024  
+    private final String reportText = "Сдача отчета на данном этапе возможно только через волонтера.";// TODO: 09.01.2024  
+
 
     //кнопки быстрого доступа к меню - они дублируют команды в главном меню, но добавлены (кодим ради кода)))))
     private final String Button1 = "Выбрать приют";
@@ -50,6 +53,13 @@ public class MenuServiceImp implements MenuService {
             "\n На данном этапе вы можете выбрать:" +//можно добавить описание
             "\n";//можно добавить описание...
 
+    private final String getCatAdoptText = "... <<<getCatAdoptText>>>...\n " +
+            "\n дополнить нужной ИНФ";
+
+    private final String getDogAdoptText = "...<<<getDogAdoptText>>>...\n " +
+            "\n дополнить нужной ИНФ";
+
+
     @Override
     public SendMessage getStartMenuShelter(Long chatId) {
         //прикрепляем кнопки выбора приюта на данном этапе CAT и DOG
@@ -64,8 +74,8 @@ public class MenuServiceImp implements MenuService {
     public SendMessage getCatMenu(Long chatId) {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
 //                GET_SHELTER_MENU,
-//                ADOPT_MENU,
-//                REPORT_MENU,
+                ADOPT_MENU,
+                REPORT_MENU,
                 HELP
         );
 //нужен рефакторинг кода..проверка  get()
@@ -80,12 +90,70 @@ public class MenuServiceImp implements MenuService {
     public SendMessage getDogMenu(Long chatId) {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
 //                GET_SHELTER_MENU,
-//                ADOPT_MENU,
-//                REPORT_MENU,
+                ADOPT_MENU,
+                REPORT_MENU,
                 HELP
         );
         String shelter = shelterInfoRepository.findById(1L).get().getAboutShelter();
         SendMessage sendMessage = new SendMessage(chatId, shelter + "\n" + "\n" + dogMenuText)
+                .replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+        return sendMessage;
+    }
+
+    @Override
+    public SendMessage getAdoptMenuShelter(Long chatId) {
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(HELP);
+        SendMessage sendMessage = new SendMessage(chatId, adoptText)
+                .replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+        return sendMessage;
+    }
+
+    @Override
+    public SendMessage getReportMenuShelter(Long chatId) {
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(HELP);
+        SendMessage sendMessage = new SendMessage(chatId, reportText)
+                .replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+        return sendMessage;
+    }
+
+    @Override
+    public SendMessage getCatAdoptMenu(Long chatId) {
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
+//                FIRST_MEET_RECOMMENDATION,
+//                DOCUMENTS,
+//                TRANSPORTATION_ADVICE,
+//                HOUSE_RULES_FOR_SMALL_ANIMAL,
+//                HOUSE_RULES_FOR_ADULT_ANIMAL,
+//                RULES_FOR_ANIMAL_WITH_DISABILITY,
+//                REFUSE_REASONS,
+                HELP
+        );
+        String shelter = shelterInfoRepository.findById(2L).get().getAboutShelter();
+        SendMessage sendMessage = new SendMessage(chatId, shelter + "\n" + "\n" + getCatAdoptText)
+                .replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+        return sendMessage;
+    }
+
+    @Override
+    public SendMessage getDogAdoptMenu(Long chatId) {
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
+//                FIRST_MEET_RECOMMENDATION,
+//                DOCUMENTS,
+//                TRANSPORTATION_ADVICE,
+//                HOUSE_RULES_FOR_SMALL_ANIMAL,
+//                HOUSE_RULES_FOR_ADULT_ANIMAL,
+//                RULES_FOR_ANIMAL_WITH_DISABILITY,
+//                DOG_HANDLER_ADVISE,
+//                DOG_HANDLER,
+//                REFUSE_REASONS,
+                HELP
+        );
+        String shelter = shelterInfoRepository.findById(1L).get().getAboutShelter();
+        SendMessage sendMessage = new SendMessage(chatId, shelter + "\n" + "\n" + getDogAdoptText)
                 .replyMarkup(keyboard);
         telegramBot.execute(sendMessage);
         return sendMessage;

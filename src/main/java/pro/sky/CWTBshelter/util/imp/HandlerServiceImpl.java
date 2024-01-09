@@ -63,5 +63,14 @@ public class HandlerServiceImpl implements HandlerService {
         if ("/help".equals(userText) || "Помощь".equals(userText)) {
             messageSender.sendMessage(chatId, helpText);
         }
+        if ("/adopt".equals(userText) || "Забрать питомца".equals(userText)) {
+            //на данном этапе в разработке 
+            menuService.getAdoptMenuShelter(chatId);// TODO: 09.01.2024  
+        }
+        if ("/report".equals(userText) || "Сдать отчет".equals(userText)) {
+            //на данном этапе в разработке
+            menuService.getReportMenuShelter(chatId);// TODO: 09.01.2024  
+
+        }
     }
 }

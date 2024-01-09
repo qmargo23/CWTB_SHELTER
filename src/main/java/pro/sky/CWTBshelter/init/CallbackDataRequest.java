@@ -4,7 +4,15 @@ public enum CallbackDataRequest {
     CAT("Приют для котов", "CAT"),
     DOG("Приют для собак", "DOG"),
 
-    HELP("Вызвать волонтера", "HELP"),;
+    HELP("Вызвать волонтера", "HELP"),
+
+    //ADOPT_MENU_____________________________________________________
+    ADOPT_MENU("Как забрать питомца.","ADOPT_MENU"),
+
+    //REPORT_MENU________________________________________________________________
+    REPORT_MENU("Правила ведения отчетов","REPORT_MENU"),
+
+    ;
     private final String text;
     private final String callbackData;
     CallbackDataRequest(String text, String callbackData) {
