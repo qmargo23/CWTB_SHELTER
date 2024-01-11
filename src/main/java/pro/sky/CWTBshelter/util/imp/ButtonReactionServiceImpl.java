@@ -64,6 +64,31 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
                 }
                 return menuService.getDogAdoptMenu(chatId);
 
+            //________________GET_SHELTER_MENU________________
+            case GET_SHELTER_MENU://это общее меню для приюта кошек и собак!
+// можно сюда "воткнуть" приветсвие пользователя
+//messageSender.sendMessage(chatId, "HELLO ");
+                return menuService.getShelterInfoMenu(chatId);
+            //________________getShelterInfoMenu________________
+            case ABOUT_SHELTER://Рассказать о приюте.
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getAboutShelter());
+                }
+            case WORKING_HOURS://Выдать расписание работы приюта и адрес.
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getAddressSchedule());
+                }
+            case LOCATION_MAP://"Показать схему проезда
+                return messageSender.sendMessage(chatId, "временно не доступно");
+            case SECURITY_CONTACT://Оформить пропуск на машину.
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getContactForCarPass());
+                }
+            case SAFETY_RECOMMENDATIONS://Рекомендации пребывания на территории приюта.
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getSafetyOnTerritory());
+                }
+
             default:
                 return messageSender.sendMessage(chatId, "КОД ЭТОЙ КНОПКИ ЕЩЕ НЕ НАПИСАН");
         }
