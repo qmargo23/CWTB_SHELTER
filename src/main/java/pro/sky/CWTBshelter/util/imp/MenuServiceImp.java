@@ -59,6 +59,7 @@ public class MenuServiceImp implements MenuService {
     private final String getDogAdoptText = "...<<<getDogAdoptText>>>...\n " +
             "\n дополнить нужной ИНФ";
 
+    private final String shelterMenuText = "...на данном этапе можно получить следующую информацию о приюте:";//можно добавить описание...
 
     @Override
     public SendMessage getStartMenuShelter(Long chatId) {
@@ -73,7 +74,7 @@ public class MenuServiceImp implements MenuService {
     @Override
     public SendMessage getCatMenu(Long chatId) {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
-//                GET_SHELTER_MENU,
+                GET_SHELTER_MENU,
                 ADOPT_MENU,
                 REPORT_MENU,
                 HELP
@@ -89,7 +90,7 @@ public class MenuServiceImp implements MenuService {
     @Override
     public SendMessage getDogMenu(Long chatId) {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
-//                GET_SHELTER_MENU,
+                GET_SHELTER_MENU,
                 ADOPT_MENU,
                 REPORT_MENU,
                 HELP
@@ -158,6 +159,25 @@ public class MenuServiceImp implements MenuService {
         telegramBot.execute(sendMessage);
         return sendMessage;
     }
+
+    @Override
+    public SendMessage getShelterInfoMenu(Long chatId) {
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
+                ABOUT_SHELTER,
+                WORKING_HOURS,
+                LOCATION_MAP,
+                SECURITY_CONTACT,
+                SAFETY_RECOMMENDATIONS,
+                HELP
+        );
+        //Бот приветствует пользователя.
+        // ? по заданию проекта, но нужно ли?
+        SendMessage sendMessage = new SendMessage(chatId, shelterMenuText)
+                .replyMarkup(keyboard);
+        telegramBot.execute(sendMessage);
+        return sendMessage;
+    }
+
 
     public void setButtonKeyboard(Update update, String greetingFirstMessageText) {
 // создаем меню-клавиатуру, для быстрого доступа к данным о приюте

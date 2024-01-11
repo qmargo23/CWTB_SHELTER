@@ -62,4 +62,11 @@ public interface MenuService {
      */
     SendMessage getDogAdoptMenu(Long chatId);
 
+    /**
+     * вызывается меню  с доступом к информации о приюте
+     * @param chatId чат пользователя
+     * @return возвращает пользователю меню  с информацией о приюте
+     */
+    SendMessage getShelterInfoMenu(Long chatId);
+
 }
