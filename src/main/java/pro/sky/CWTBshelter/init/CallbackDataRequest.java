@@ -8,6 +8,15 @@ public enum CallbackDataRequest {
 
     //ADOPT_MENU_____________________________________________________
     ADOPT_MENU("Как забрать питомца.","ADOPT_MENU"),
+    FIRST_MEET_RECOMMENDATION("Рекомендации для первого знакомства.","FIRST_MEET_RECOMMENDATION"),
+    DOCUMENTS("Список необходимых документов.","DOCUMENTS"),
+    TRANSPORTATION_ADVICE("Рекомендации по транспортировке животного","TRANSPORTATION_ADVICE"),
+    HOUSE_RULES_FOR_SMALL_ANIMAL("Рекомендации по обустройству дома для детенышей","HOUSE_RULES_FOR_SMALL_ANIMAL"),
+    HOUSE_RULES_FOR_ADULT_ANIMAL("Рекомендации по обустройству дома для взрослого питомца","HOUSE_RULES_FOR_ADULT_ANIMAL"),
+    RULES_FOR_ANIMAL_WITH_DISABILITY("Рекомендации по обустройству дома для питомца с ограниченными возможностями","RULES_FOR_ANIMAL_WITH_DISABILITY"),
+    DOG_HANDLER_ADVISE("Советы кинолога по первичному общению с собакой.","DOG_HANDLER_ADVISE"),
+    DOG_HANDLER("Советы проверенных кинологов.","DOG_HANDLER"),
+    REFUSE_REASONS("Причины отказа.","REFUSE_REASONS"),
 
     //REPORT_MENU________________________________________________________________
     REPORT_MENU("Правила ведения отчетов","REPORT_MENU"),
