@@ -12,6 +12,14 @@ public enum CallbackDataRequest {
     //REPORT_MENU________________________________________________________________
     REPORT_MENU("Правила ведения отчетов","REPORT_MENU"),
 
+    //GET_SHELTER_MENU_____________________________________________________
+    GET_SHELTER_MENU("(I) Информация о приюте. ","GET_INFO_SHELTER"),
+    ABOUT_SHELTER("Рассказать о приюте. ","ABOUT_SHELTER"),
+    WORKING_HOURS("Выдать расписание работы приюта и адрес.","WORKING_HOURS"),
+    LOCATION_MAP("Показать схему проезда (в разработке !!!)","LOCATION_MAP"),
+    SECURITY_CONTACT("Оформить пропуск на машину.","SECURITY_CONTACT"),
+    SAFETY_RECOMMENDATIONS("Рекомендации пребывания на территории приюта. ","SAFETY_RECOMMENDATIONS"),
+
     ;
     private final String text;
     private final String callbackData;
