@@ -52,19 +52,57 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
         switch (dataRequest) {
             case CAT:
                 isCat = true;
-                return menuService.getCatMenu(chatId);//создадим сообщение для приюта cat
+                return menuService.getCatMenu(chatId);//создадим menu-сообщение для приюта cat
             case DOG:
                 isCat = false;
-                return menuService.getDogMenu(chatId);//создадим сообщение для приюта dog
+                return menuService.getDogMenu(chatId);//создадим menu-сообщение для приюта dog
             case HELP:
                 return messageSender.sendMessage(chatId, "Воспользуйтесь командой /help");
+
+                //________________ADOPT_MENU________________
             case ADOPT_MENU:
                 if (isCat) {
                     return menuService.getCatAdoptMenu(chatId);
                 }
                 return menuService.getDogAdoptMenu(chatId);
+            case FIRST_MEET_RECOMMENDATION:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getFirstMeetRecommendation());
+                }
+            case DOCUMENTS:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getDocuments());
+                }
+            case TRANSPORTATION_ADVICE:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getTransportationAdvice());
+                }
+            case HOUSE_RULES_FOR_SMALL_ANIMAL:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getHouseRulesForSmallAnimal());
+                }
+            case HOUSE_RULES_FOR_ADULT_ANIMAL:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getHouseRulesForAdultAnimal());
+                }
+            case RULES_FOR_ANIMAL_WITH_DISABILITY:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getRulesForAnimalWithDisability());
+                }
+            case DOG_HANDLER_ADVISE:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getHouseRulesForAdultAnimal());
+                }
+            case DOG_HANDLER:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getCynologists());
+                }
+            case REFUSE_REASONS:
+                if (shelterInfoOptional.isPresent()) {
+                    return messageSender.sendMessage(chatId, shelterInfoOptional.get().getRefuseReasons());
+                }
 
-            //________________GET_SHELTER_MENU________________
+                //________________GET_SHELTER_MENU________________
             case GET_SHELTER_MENU://это общее меню для приюта кошек и собак!
 // можно сюда "воткнуть" приветсвие пользователя
 //messageSender.sendMessage(chatId, "HELLO ");

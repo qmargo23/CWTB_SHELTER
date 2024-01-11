@@ -123,13 +123,13 @@ public class MenuServiceImp implements MenuService {
     @Override
     public SendMessage getCatAdoptMenu(Long chatId) {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
-//                FIRST_MEET_RECOMMENDATION,
-//                DOCUMENTS,
-//                TRANSPORTATION_ADVICE,
-//                HOUSE_RULES_FOR_SMALL_ANIMAL,
-//                HOUSE_RULES_FOR_ADULT_ANIMAL,
-//                RULES_FOR_ANIMAL_WITH_DISABILITY,
-//                REFUSE_REASONS,
+                FIRST_MEET_RECOMMENDATION,
+                DOCUMENTS,
+                TRANSPORTATION_ADVICE,
+                HOUSE_RULES_FOR_SMALL_ANIMAL,
+                HOUSE_RULES_FOR_ADULT_ANIMAL,
+                RULES_FOR_ANIMAL_WITH_DISABILITY,
+                REFUSE_REASONS,
                 HELP
         );
         String shelter = shelterInfoRepository.findById(2L).get().getAboutShelter();
@@ -142,15 +142,15 @@ public class MenuServiceImp implements MenuService {
     @Override
     public SendMessage getDogAdoptMenu(Long chatId) {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
-//                FIRST_MEET_RECOMMENDATION,
-//                DOCUMENTS,
-//                TRANSPORTATION_ADVICE,
-//                HOUSE_RULES_FOR_SMALL_ANIMAL,
-//                HOUSE_RULES_FOR_ADULT_ANIMAL,
-//                RULES_FOR_ANIMAL_WITH_DISABILITY,
-//                DOG_HANDLER_ADVISE,
-//                DOG_HANDLER,
-//                REFUSE_REASONS,
+                FIRST_MEET_RECOMMENDATION,
+                DOCUMENTS,
+                TRANSPORTATION_ADVICE,
+                HOUSE_RULES_FOR_SMALL_ANIMAL,
+                HOUSE_RULES_FOR_ADULT_ANIMAL,
+                RULES_FOR_ANIMAL_WITH_DISABILITY,
+                DOG_HANDLER_ADVISE,
+                DOG_HANDLER,
+                REFUSE_REASONS,
                 HELP
         );
         String shelter = shelterInfoRepository.findById(1L).get().getAboutShelter();
