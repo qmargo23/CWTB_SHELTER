@@ -7,6 +7,9 @@ import pro.sky.CWTBshelter.model.ShelterUserTelegram;
 
 import java.util.Optional;
 
+/**
+ * <b>ShelterUserTelegramRepository</b> <i>-репозиторий связывающий БД и приложение</i>
+ */
 @Repository
 public interface ShelterUserTelegramRepository extends JpaRepository<ShelterUserTelegram, Long> {
     Optional<ShelterUserTelegram> findSheltersUserTelegramByChatId(Long chatId);
