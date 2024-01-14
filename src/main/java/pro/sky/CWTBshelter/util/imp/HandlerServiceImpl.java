@@ -3,6 +3,7 @@ package pro.sky.CWTBshelter.util.imp;
 import com.pengrad.telegrambot.model.Update;
 import org.springframework.stereotype.Service;
 import pro.sky.CWTBshelter.model.BotState;
+import pro.sky.CWTBshelter.model.ShelterUser;
 import pro.sky.CWTBshelter.model.ShelterUserTelegram;
 import pro.sky.CWTBshelter.repository.ShelterUserTelegramRepository;
 import pro.sky.CWTBshelter.service.imp.ShelterUserTelegramServiceImp;
@@ -16,7 +17,9 @@ import static pro.sky.CWTBshelter.model.ShelterUserType.*;
 @Service
 public class HandlerServiceImpl implements HandlerService {
     private final String StartText = "Этот телеграмм-бот может отвечать на популярные вопросы людей о том, что нужно знать и уметь, чтобы забрать животное из приюта.";
-    private final String helpText = "Наши волонтеры обязательно перезвонят! Для обратной связи, пожалуйста, оставьте свой контактный номер телефона в формате +7-9**-***-**-**";
+    private final String helpText = "Наши волонтеры обязательно перезвонят! Для обратной связи, пожалуйста, оставьте свой контактный номер телефона в формате +7-9**-***-**-** . \n\nПри правильном вводе  Вашего номера телефона Вы увидите соответствующее сообщение!\n...чтобы скорректировать данные можете попробовать ввести номер телефона еще раз!\n " ;
+    private final String SAVENUMBERTEXT = "Ваш номер успешно сохранен, ожидайте звонка от волонтера.";
+
 
     private final MessageSender messageSender;
     private final MenuServiceImp menuService;
@@ -39,9 +42,21 @@ public class HandlerServiceImpl implements HandlerService {
     public void messageHandler(Update update) {
         Long chatId = update.message().chat().id();
         String userText = update.message().text();
+        //ищем user в БД
+        Optional<ShelterUserTelegram> user = userRepository.findSheltersUserTelegramByChatId(chatId);
+
+        //блок проверки на ввод номера телефона!
+        if (user.isPresent()) {
+            Long id = user.get().getId();
+            // setPhoneNumber - проверка
+            boolean phoneNumber = userService.setPhoneNumber(id, userText);
+            if (phoneNumber) {
+                messageSender.sendMessage(chatId, SAVENUMBERTEXT);
+            }
+        }
 
         if ("/start".equals(userText) || "Выбрать приют".equals(userText)) {
-            Optional<ShelterUserTelegram> user = userRepository.findSheltersUserTelegramByChatId(chatId);
+// перенесла выше           Optional<ShelterUser> user = userRepository.findSheltersUserByChatId(chatId);
             //регистрируем и приветствуем нового пользователя приюта
             if (user.isEmpty()) {
                 ShelterUserTelegram regUser = new ShelterUserTelegram();

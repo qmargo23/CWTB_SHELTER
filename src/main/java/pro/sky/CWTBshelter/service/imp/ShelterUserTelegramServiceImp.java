@@ -7,9 +7,14 @@ import pro.sky.CWTBshelter.repository.ShelterUserTelegramRepository;
 import pro.sky.CWTBshelter.service.ShelterUserTelegramService;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ShelterUserTelegramServiceImp implements ShelterUserTelegramService {
+    //regex шаблон для номера телефона
+    String regex = "\\+7-9\\d{2}-\\d{3}-\\d{2}-\\d{2}";
+
     private final ShelterUserTelegramRepository repository;
 
     public ShelterUserTelegramServiceImp(ShelterUserTelegramRepository repository) {
@@ -45,6 +50,23 @@ public class ShelterUserTelegramServiceImp implements ShelterUserTelegramService
             repository.deleteById(id);
         }
         throw new ShelterUserTelegramNotFoundException();
+    }
+
+    @Override
+    public boolean setPhoneNumber(Long id, String phoneNumber) {
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phoneNumber);
+
+        if (matcher.matches()) {
+            ShelterUserTelegram shelterUser = repository.findById(id).orElse(null);
+            if (shelterUser != null) {
+                shelterUser.setUserPhoneNumber(phoneNumber);
+                repository.save(shelterUser);
+                return true;
+            }
+        }
+        return false;
     }
 }
 
