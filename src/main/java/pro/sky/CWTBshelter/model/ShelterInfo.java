@@ -58,6 +58,7 @@ public class ShelterInfo {
     private String documents;
     private String transportationAdvice;
     private String houseRulesForSmallAnimal;
+    @Column(name = "house_rules_for_adult_animal")
     private String houseRulesForAdultAnimal;
     private String rulesForAnimalWithDisability;
     private String cynologistAdvice;
