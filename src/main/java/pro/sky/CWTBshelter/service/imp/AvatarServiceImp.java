@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pro.sky.CWTBshelter.exceptions.AvatarNotFoundException;
 import pro.sky.CWTBshelter.model.Avatar;
 import pro.sky.CWTBshelter.model.ShelterInfo;
 import pro.sky.CWTBshelter.repository.AvatarRepository;
@@ -16,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
+import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -40,7 +39,7 @@ public class AvatarServiceImp implements AvatarService {
 
         ShelterInfo result = shelterInfoService.findShelterInfoById(id);
 
-        Path filePath = Path.of(avatarsDir, id + "." + getExtension(file.getOriginalFilename()));
+        Path filePath = Path.of(avatarsDir, id + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
 
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -84,10 +83,6 @@ public class AvatarServiceImp implements AvatarService {
 
     @Override
     public Avatar findAvatar(Long id) {
-        Optional<Avatar> byShelterInfoId = avatarRepository.findByShelterInfoId(id);
-        if (byShelterInfoId.isEmpty()) {
-            return avatarRepository.findByShelterInfoId(id).orElseThrow(AvatarNotFoundException::new);
-        }
         return avatarRepository.findByShelterInfoId(id).orElse(new Avatar());
     }
 
