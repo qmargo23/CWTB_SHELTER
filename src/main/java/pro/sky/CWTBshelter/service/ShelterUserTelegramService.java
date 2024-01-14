@@ -42,6 +42,13 @@ public interface ShelterUserTelegramService {
      * @param id идентификатор пользователя, которого нужно удалить
      */
     boolean removeById(Long id);
+    /**
+     * Устанавливает номер телефона для заданного идентификатора.
+     *
+     * @param id Идентификатор пользователя.
+     * @param phoneNumber Номер телефона, который необходимо установить.
+     */
+    boolean setPhoneNumber(Long id,String phoneNumber);
 }
 
 

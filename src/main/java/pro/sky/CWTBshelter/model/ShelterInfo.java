@@ -6,7 +6,7 @@ import lombok.*;
 /**
  * класс ShelterInfo - сущность описывающая питомник.
  * Содержит пустой конструктор, геттеры, сеттеры,
- * переопределны equals, hashCode и toString
+ * переопределены equals, hashCode и toString
  * содержит следующие поля:
  * <br>
  * id                           - идентификатор питомника
@@ -58,6 +58,7 @@ public class ShelterInfo {
     private String documents;
     private String transportationAdvice;
     private String houseRulesForSmallAnimal;
+    @Column(name = "house_rules_for_adult_animal")
     private String houseRulesForAdultAnimal;
     private String rulesForAnimalWithDisability;
     private String cynologistAdvice;

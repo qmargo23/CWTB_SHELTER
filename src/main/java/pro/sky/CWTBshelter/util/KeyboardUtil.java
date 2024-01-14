@@ -9,12 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * создает кнопки с соответвующими названиями и значениями<br>
+ * Создает кнопки с соответствующими названиями и значениями<br>
  * @see CallbackDataRequest
  */
 @Service
 public class KeyboardUtil {
     // strings может содержать только те константы, которые есть в enum CallbackDataRequest
+
+    /**
+     * Устанавливает кнопки в условную клавиатуру
+     * @param strings название кнопок
+     * @return объект, представляющий собой встроенную клавиатуру {@link InlineKeyboardMarkup  }
+     */
     public InlineKeyboardMarkup setKeyboard(CallbackDataRequest... strings) {
         List<InlineKeyboardButton> keyboardButtons = getKeyboardButtons(strings);
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -23,6 +29,12 @@ public class KeyboardUtil {
         }
         return inlineKeyboardMarkup;
     }
+
+    /**
+     * Выдает кнопки по местам в условной клавиатуре
+     * @param strings название кнопок
+     * @return
+     */
 
     private List<InlineKeyboardButton> getKeyboardButtons(CallbackDataRequest... strings) {
         List<InlineKeyboardButton> inlineKeyboardButtons = new ArrayList<>();

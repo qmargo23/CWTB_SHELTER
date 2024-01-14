@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Service;
 import pro.sky.CWTBshelter.init.CallbackDataRequest;
 import pro.sky.CWTBshelter.model.ShelterInfo;
+import pro.sky.CWTBshelter.repository.AnimalRepository;
 import pro.sky.CWTBshelter.repository.ShelterInfoRepository;
 import pro.sky.CWTBshelter.util.ButtonReactionService;
 import pro.sky.CWTBshelter.util.MenuService;
@@ -23,15 +24,17 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
     private final MessageSender messageSender;
     private final MenuService menuService;
     private final ShelterInfoRepository shelterInfoRepository;
+    private final AnimalRepository animalRepository;
 
     public ButtonReactionServiceImpl(TelegramBot telegramBot,
                                      MessageSender messageSender,
                                      MenuService menuService,
-                                     ShelterInfoRepository shelterInfoRepository) {
+                                     ShelterInfoRepository shelterInfoRepository, AnimalRepository animalRepository) {
         this.telegramBot = telegramBot;
         this.messageSender = messageSender;
         this.menuService = menuService;
         this.shelterInfoRepository = shelterInfoRepository;
+        this.animalRepository = animalRepository;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
             case HELP:
                 return messageSender.sendMessage(chatId, "Воспользуйтесь командой /help");
 
-                //________________ADOPT_MENU________________
+            //________________ADOPT_MENU________________
             case ADOPT_MENU:
                 if (isCat) {
                     return menuService.getCatAdoptMenu(chatId);
@@ -101,8 +104,14 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
                 if (shelterInfoOptional.isPresent()) {
                     return messageSender.sendMessage(chatId, shelterInfoOptional.get().getRefuseReasons());
                 }
+            case CAT_ADOPT_LIST:
+                String cats = animalRepository.catInShelter().toString();
+                return messageSender.sendMessage(chatId, cats);
+            case DOG_ADOPT_LIST:
+                String dogs = animalRepository.dogInShelter().toString();
+                return messageSender.sendMessage(chatId, dogs);
 
-                //________________GET_SHELTER_MENU________________
+            //________________GET_SHELTER_MENU________________
             case GET_SHELTER_MENU://это общее меню для приюта кошек и собак!
 // можно сюда "воткнуть" приветсвие пользователя
 //messageSender.sendMessage(chatId, "HELLO ");
