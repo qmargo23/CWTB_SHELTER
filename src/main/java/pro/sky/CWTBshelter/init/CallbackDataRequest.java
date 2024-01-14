@@ -5,8 +5,10 @@ public enum CallbackDataRequest {
     DOG("Приют для собак", "DOG"),
 
     HELP("Вызвать волонтера", "HELP"),
-
-    //ADOPT_MENU_____________________________________________________
+    //ADOPT_MENU_LIST____________________________________________________
+    CAT_ADOPT_LIST("Кошки", "CAT_ADOPT_LIST"),
+    DOG_ADOPT_LIST("Собаки", "DOG_ADOPT_LIST"),
+    //ADOPT_INFO_MENU_____________________________________________________
     ADOPT_MENU("Как забрать питомца.","ADOPT_MENU"),
     FIRST_MEET_RECOMMENDATION("Рекомендации для первого знакомства.","FIRST_MEET_RECOMMENDATION"),
     DOCUMENTS("Список необходимых документов.","DOCUMENTS"),

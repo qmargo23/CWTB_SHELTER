@@ -22,7 +22,8 @@ import static pro.sky.CWTBshelter.init.CallbackDataRequest.*;
 @Service
 public class MenuServiceImp implements MenuService {
     private final String startText = "Для начала работы надо выбрать приют.";//текст выбора приюта
-    private final String adoptText = "Усыновление питомца на данном этапе возможно только через волонтера.";// TODO: 09.01.2024  
+    private final String adoptText = "Усыновление питомца возможно только через волонтера.\n" +
+            "\n...на данном этапе Вы можете посмотреть какие питомцы ищут новый дом:";
     private final String reportText = "Сдача отчета на данном этапе возможно только через волонтера.";// TODO: 09.01.2024  
 
 
@@ -104,7 +105,10 @@ public class MenuServiceImp implements MenuService {
 
     @Override
     public SendMessage getAdoptMenuShelter(Long chatId) {
-        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(HELP);
+        InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
+                CAT_ADOPT_LIST,
+                DOG_ADOPT_LIST,
+                HELP);
         SendMessage sendMessage = new SendMessage(chatId, adoptText)
                 .replyMarkup(keyboard);
         telegramBot.execute(sendMessage);
