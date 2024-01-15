@@ -17,8 +17,9 @@ import static pro.sky.CWTBshelter.model.ShelterUserType.*;
 @Service
 public class HandlerServiceImpl implements HandlerService {
     private final String StartText = "Этот телеграмм-бот может отвечать на популярные вопросы людей о том, что нужно знать и уметь, чтобы забрать животное из приюта.";
-    private final String helpText = "Наши волонтеры обязательно перезвонят! Для обратной связи, пожалуйста, оставьте свой контактный номер телефона в формате +7-9**-***-**-** . \n\nПри правильном вводе  Вашего номера телефона Вы увидите соответствующее сообщение!\n...чтобы скорректировать данные можете попробовать ввести номер телефона еще раз!\n " ;
+    private final String helpText = "Наши волонтеры обязательно перезвонят! Для обратной связи, пожалуйста, оставьте свой контактный номер телефона в формате +7-9**-***-**-** . \n\nПри правильном вводе  Вашего номера телефона Вы увидите соответствующее сообщение!\n...чтобы скорректировать данные можете попробовать ввести номер телефона еще раз!\n ";
     private final String SAVENUMBERTEXT = "Ваш номер успешно сохранен, ожидайте звонка от волонтера.";
+    private final String noReportText = "На данный момент у Вас нет питомца, вы не можете сдать отчет.";
 
 
     private final MessageSender messageSender;
@@ -80,12 +81,14 @@ public class HandlerServiceImpl implements HandlerService {
         }
         if ("/adopt".equals(userText) || "Забрать питомца".equals(userText)) {
             //на данном этапе в разработке 
-            menuService.getAdoptMenuShelter(chatId);// TODO: 09.01.2024  
+            menuService.getAdoptMenuShelter(chatId);
         }
         if ("/report".equals(userText) || "Сдать отчет".equals(userText)) {
-            //на данном этапе в разработке
-            menuService.getReportMenuShelter(chatId);// TODO: 09.01.2024  
-
+            //проверка: если у user есть животное
+            if (user.get().getAnimal() != null) {
+                menuService.getReportMenuShelter(chatId);
+            } else
+                messageSender.sendMessage(chatId, noReportText);
         }
     }
 }
