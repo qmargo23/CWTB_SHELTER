@@ -9,3 +9,7 @@ databaseChangeLog:
       file: liquibase/scripts/telegram-shelter-info.sql
   - include:
       file: liquibase/scripts/report.sql
+  - include:
+      file: liquibase/scripts/shelter-user-telegram.sql
+  - include:
+      file: liquibase/scripts/init-avatar.sql
