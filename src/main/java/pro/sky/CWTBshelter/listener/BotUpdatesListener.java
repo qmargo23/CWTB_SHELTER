@@ -14,6 +14,7 @@ import pro.sky.CWTBshelter.handler.Handler;
 import pro.sky.CWTBshelter.handler.StartHandler;
 import pro.sky.CWTBshelter.handler.WaitCommandHandler;
 import pro.sky.CWTBshelter.model.BotState;
+import pro.sky.CWTBshelter.service.ReportTelegramService;
 import pro.sky.CWTBshelter.service.imp.TelegramUserServiceImpl;
 import pro.sky.CWTBshelter.util.ButtonReactionService;
 import pro.sky.CWTBshelter.util.imp.HandlerServiceImpl;
@@ -32,6 +33,7 @@ public class BotUpdatesListener implements UpdatesListener {
     private final Logger logger = LoggerFactory.getLogger(BotUpdatesListener.class);
     private final HandlerServiceImpl updateHandler;
     private final ButtonReactionService buttonReactionService;
+    private final ReportTelegramService reportService;
 
     public BotUpdatesListener(
             TelegramBot bot,
@@ -39,12 +41,13 @@ public class BotUpdatesListener implements UpdatesListener {
             StartHandler startHandler,
             WaitCommandHandler waitCommandHandler,
             TelegramUserDTOMapper telegramUserDTOMapper,
-            HandlerServiceImpl updateHandler, ButtonReactionService buttonReactionService) {
+            HandlerServiceImpl updateHandler, ButtonReactionService buttonReactionService, ReportTelegramService reportService) {
         this.bot = bot;
         this.telegramUserService = telegramUserService;
         this.telegramUserDTOMapper = telegramUserDTOMapper;
         this.updateHandler = updateHandler;
         this.buttonReactionService = buttonReactionService;
+        this.reportService = reportService;
         handlerMap.put(BotState.START, startHandler);
         handlerMap.put(BotState.WAIT_COMMAND, waitCommandHandler);
     }
@@ -87,7 +90,8 @@ public class BotUpdatesListener implements UpdatesListener {
                 } else if (update.message().text() != null) {
                     updateHandler.messageHandler(update);// вызвать методы класса обрабатывающие  update.message().text() - когда введен ТЕКСТ
                 } else if (update.message().photo() != null || update.message().caption() != null) {
-// вызвать методы класса обрабатывающие ФОТО, ВИДЕО иди ДОКУМЕНТЫ
+                // вызвать методы класса обрабатывающие ФОТО, ВИДЕО или ДОКУМЕНТЫ
+                    reportService.postReport(update.message().chat().id(), update);
                 }
             });
         } catch (Exception e) {
