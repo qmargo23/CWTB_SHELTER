@@ -82,7 +82,7 @@ public class MenuServiceImp implements MenuService {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
                 GET_SHELTER_MENU,
                 ADOPT_MENU,
-                REPORT_MENU,
+//                REPORT_MENU,
                 HELP
         );
 //нужен рефакторинг кода..проверка  get()
@@ -98,7 +98,7 @@ public class MenuServiceImp implements MenuService {
         InlineKeyboardMarkup keyboard = keyboardUtil.setKeyboard(
                 GET_SHELTER_MENU,
                 ADOPT_MENU,
-                REPORT_MENU,
+//                REPORT_MENU,
                 HELP
         );
         String shelter = shelterInfoRepository.findById(1L).get().getAboutShelter();
