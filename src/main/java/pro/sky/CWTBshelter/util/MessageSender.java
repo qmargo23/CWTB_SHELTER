@@ -18,8 +18,8 @@ public class MessageSender {
 
     /**
      * Отправляет сообщения
-     * @param chatId - идентификатор чата
-     * @param message - сообщение
+     * @param chatId  идентификатор чата
+     * @param message  сообщение
      * @return сообщение
      */
     public SendMessage sendMessage(Long chatId, String message) {
