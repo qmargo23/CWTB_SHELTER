@@ -137,7 +137,7 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
     }
     @Scheduled(cron = "11 56 10 * * *")//сообщение отсылается всем пользователям каждый день (в 10 часов 56 мин 11 сек)
     public void reportReminder() {
-        //ищем users у которых поле AdoptDate не ноль и ортправлем им сообщение-напоминание
+        //ищем users у которых поле AdoptDate не ноль и отправляем им сообщение-напоминание
         List<ShelterUserTelegram> users = userRepository.findShelterUserByAdoptDateIsNotNull();
         if (!users.isEmpty()) {
             for (ShelterUserTelegram user : users) {
