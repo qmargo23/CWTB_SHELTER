@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetFileResponse;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import pro.sky.CWTBshelter.exception.ReportNotFoundException;
@@ -34,7 +35,7 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
     private final String postReportTextToday_NoAnimal = "Бот не может принять Ваши данные, поскольку у Вас нет питомца взятого из нашего приюта.";
     private final String postAttentionText = "Для отчета необходимо отсылать  фото и описание. В следующий раз, пожалуйста, сделайте фото и описание вашего подопечного!";
     private final String postReportText = "Отчет отправлен, пожалуйста, не забывайте отправлять отчеты о вашем питомце ежедневно.";
-
+    private final String reportReminderText = "Сегодня надо прислать отчет о жизни вашего питомца!";
 
     private final TelegramBot telegramBot;
     private final ShelterUserTelegramRepository userRepository;
@@ -133,5 +134,16 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
      */
     public void checkIsFullReportPostToday(Long chatId, Update update) {
         //можно тут проверить и запросить, чтобы отчет был введен полностью
+    }
+    @Scheduled(cron = "11 56 10 * * *")//сообщение отсылается всем пользователям каждый день (в 10 часов 56 мин 11 сек)
+    public void reportReminder() {
+        //ищем users у которых поле AdoptDate не ноль и ортправлем им сообщение-напоминание
+        List<ShelterUserTelegram> users = userRepository.findShelterUserByAdoptDateIsNotNull();
+        if (!users.isEmpty()) {
+            for (ShelterUserTelegram user : users) {
+                Long chatId = user.getChatId();
+                messageSender.sendMessage(chatId, reportReminderText);
+            }
+        }
     }
 }
