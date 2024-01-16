@@ -3,15 +3,20 @@ package pro.sky.CWTBshelter.util.imp;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pro.sky.CWTBshelter.init.CallbackDataRequest;
+import pro.sky.CWTBshelter.model.Avatar;
 import pro.sky.CWTBshelter.model.ShelterInfo;
 import pro.sky.CWTBshelter.repository.AnimalRepository;
+import pro.sky.CWTBshelter.repository.AvatarRepository;
 import pro.sky.CWTBshelter.repository.ShelterInfoRepository;
 import pro.sky.CWTBshelter.util.ButtonReactionService;
 import pro.sky.CWTBshelter.util.MenuService;
 import pro.sky.CWTBshelter.util.MessageSender;
 
+import java.io.File;
 import java.util.Optional;
 
 @Service
@@ -25,18 +30,21 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
     private final MenuService menuService;
     private final ShelterInfoRepository shelterInfoRepository;
     private final AnimalRepository animalRepository;
+    private final AvatarRepository avatarRepository;
 
     public ButtonReactionServiceImpl(TelegramBot telegramBot,
                                      MessageSender messageSender,
                                      MenuService menuService,
-                                     ShelterInfoRepository shelterInfoRepository, AnimalRepository animalRepository) {
+                                     ShelterInfoRepository shelterInfoRepository, AnimalRepository animalRepository, AvatarRepository avatarRepository) {
         this.telegramBot = telegramBot;
         this.messageSender = messageSender;
         this.menuService = menuService;
         this.shelterInfoRepository = shelterInfoRepository;
         this.animalRepository = animalRepository;
+        this.avatarRepository = avatarRepository;
     }
 
+    @Transactional
     @Override
     public SendMessage buttonReaction(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.message().chat().id();
@@ -126,7 +134,17 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
                     return messageSender.sendMessage(chatId, shelterInfoOptional.get().getAddressSchedule());
                 }
             case LOCATION_MAP://"Показать схему проезда
-                return messageSender.sendMessage(chatId, "временно не доступно");
+                if (shelterInfoOptional.isEmpty()) {
+                    return null;
+                }
+                Avatar avatar = avatarRepository.findByShelterInfoId(shelterInfoOptional.get().getId()).orElse(null);
+                if (avatar == null) {
+                    return null;
+                }
+                SendPhoto sendPhoto = new SendPhoto(chatId, new File(avatar.getFilePath()));
+                telegramBot.execute(sendPhoto);
+                return null;
+
             case SECURITY_CONTACT://Оформить пропуск на машину.
                 if (shelterInfoOptional.isPresent()) {
                     return messageSender.sendMessage(chatId, shelterInfoOptional.get().getContactForCarPass());
