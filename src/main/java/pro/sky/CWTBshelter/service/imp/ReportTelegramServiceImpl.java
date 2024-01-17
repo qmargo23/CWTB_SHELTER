@@ -12,9 +12,11 @@ import org.springframework.util.StringUtils;
 import pro.sky.CWTBshelter.exception.ReportNotFoundException;
 import pro.sky.CWTBshelter.model.ReportTelegram;
 import pro.sky.CWTBshelter.model.ShelterUserTelegram;
+import pro.sky.CWTBshelter.model.ShelterUserType;
 import pro.sky.CWTBshelter.repository.ReportTelegramRepository;
 import pro.sky.CWTBshelter.repository.ShelterUserTelegramRepository;
 import pro.sky.CWTBshelter.service.ReportTelegramService;
+import pro.sky.CWTBshelter.service.ShelterUserTelegramService;
 import pro.sky.CWTBshelter.util.MessageSender;
 
 import java.io.IOException;
@@ -24,6 +26,8 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
+import static pro.sky.CWTBshelter.model.ShelterUserType.*;
+
 @Service
 public class ReportTelegramServiceImpl implements ReportTelegramService {
     private final String postReportTextToday = "Вы уже отправляли ОТЧЕТ за сегодня!";
@@ -32,18 +36,22 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
     private final String postReportText = "Отчет отправлен, пожалуйста, не забывайте отправлять отчеты о вашем питомце ежедневно.";
     private final String postReportTodayText = "Сегодня надо прислать отчет о жизни вашего питомца, пожалуйста,\n не забывайте отправлять отчеты о вашем питомце ежедневно.";
     private final String postReportTwoDaysText = "Вы не присылали отчет уже 2 дня...";
+    private final String reportDate_EXTEND_14Text = "Этап в 14 дней пройден!";
+    private final String reportDate_SUCCESSFUL_COMPLETION_TEXT = "Этап в 30 дней пройден! Поздравляем,\n ... ";
 
 
     private final TelegramBot telegramBot;
     private final ShelterUserTelegramRepository userRepository;
     private final MessageSender messageSender;
     private final ReportTelegramRepository reportTelegramRepository;
+    private final ShelterUserTelegramService userService;
 
-    public ReportTelegramServiceImpl(TelegramBot telegramBot, ShelterUserTelegramRepository userRepository, ReportTelegramRepository reportTelegramRepository, MessageSender messageSender) {
+    public ReportTelegramServiceImpl(TelegramBot telegramBot, ShelterUserTelegramRepository userRepository, ReportTelegramRepository reportTelegramRepository, MessageSender messageSender, ShelterUserTelegramService userService) {
         this.telegramBot = telegramBot;
         this.userRepository = userRepository;
         this.messageSender = messageSender;
         this.reportTelegramRepository = reportTelegramRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -137,6 +145,7 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
             }
         }
     }
+
     @Scheduled(cron = "0 00 15 * * *")
     public void reportReminderTwoDays() {
 
@@ -164,5 +173,32 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
         }
     }
 
+    @Scheduled(cron = "0 0 20 * * *")
+    public void probationSolutionSuccess() {
+        List<ShelterUserTelegram> users = userRepository.findSheltersUserTelegramByAdoptDateIsNotNull();
+        if (!users.isEmpty()) {
+            for (ShelterUserTelegram user : users) {
+                Long chatId = user.getChatId();
 
+                LocalDate reportDate_EXTEND_14 = user.getAdoptDate().plusDays(14);
+                LocalDate reportDate_EXTEND_SUCCESSFUL_COMPLETION = user.getAdoptDate().plusDays(30);
+                LocalDate currentDate = LocalDate.now();
+
+                ShelterUserType shelterUserType = user.getShelterUserType();
+
+                if (currentDate.isAfter(reportDate_EXTEND_14) && shelterUserType == PROBATION) {//
+                    user.setShelterUserType(PROBATION_EXTEND);
+                    userService.add(user);
+                    messageSender.sendMessage(chatId, reportDate_EXTEND_14Text);
+                }
+
+                if (currentDate.isAfter(reportDate_EXTEND_SUCCESSFUL_COMPLETION) && shelterUserType == PROBATION_EXTEND) {
+                    user.setShelterUserType(SUCCESSFUL_COMPLETION);
+                    userService.add(user);
+                    //удаление питомца (и другие действия с БД) осуществляется Волонтерами
+                    messageSender.sendMessage(chatId, reportDate_SUCCESSFUL_COMPLETION_TEXT);
+                }
+            }
+        }
+    }
 }
