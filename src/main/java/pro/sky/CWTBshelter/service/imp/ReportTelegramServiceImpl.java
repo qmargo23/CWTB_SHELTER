@@ -6,15 +6,12 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetFileResponse;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import pro.sky.CWTBshelter.exception.ReportNotFoundException;
 import pro.sky.CWTBshelter.model.ReportTelegram;
-import pro.sky.CWTBshelter.model.ShelterUser;
 import pro.sky.CWTBshelter.model.ShelterUserTelegram;
 import pro.sky.CWTBshelter.repository.ReportTelegramRepository;
-import pro.sky.CWTBshelter.repository.ShelterUserRepository;
 import pro.sky.CWTBshelter.repository.ShelterUserTelegramRepository;
 import pro.sky.CWTBshelter.service.ReportTelegramService;
 import pro.sky.CWTBshelter.util.MessageSender;
@@ -53,18 +50,21 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
     public SendMessage postReport(Long chatId, Update update) {
 
         Optional<ShelterUserTelegram> user = userRepository.findSheltersUserTelegramByChatId(chatId);
-//проверка существует ли на сегодня отчет...
+
         if (user.isPresent()) {
             if (user.get().getAnimal() == null) {
                 return messageSender.sendMessage(chatId, postReportTextToday_NoAnimal);
             }
 
-            Optional<ReportTelegram> reports = reportTelegramRepository.findReportByToday(LocalDate.now());
-            if (reports.isPresent()) {
-                return messageSender.sendMessage(chatId, postReportTextToday);
+            List<ReportTelegram> bySheltersUserId = reportTelegramRepository.findBySheltersUserId(user.get().getId());
+            if (!bySheltersUserId.isEmpty()) {
+                for (ReportTelegram rez : bySheltersUserId) {
+                    if (rez.getLocalDate().isEqual(LocalDate.now())) {
+                        return messageSender.sendMessage(chatId, postReportTextToday);
+                    }
+                }
             }
         }
-//______________ описание под фото
         String caption = update.message().caption();//описание под картинкой
         ReportTelegram newReport = new ReportTelegram();
         user.ifPresent(newReport::setSheltersUser);
@@ -72,7 +72,6 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
         newReport.setReportTextUnderPhoto(caption);
         newReport.setLocalDate(LocalDate.now());
 
-//______________  фото
         PhotoSize photoSize = update.message().photo()[update.message().photo().length - 1];
         GetFileResponse getFileResponse = telegramBot.execute(new GetFile(photoSize.fileId()));
         if (getFileResponse.isOk()) {
@@ -85,14 +84,13 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
                 throw new RuntimeException(e);
             }
         }
-        //______________прикрепляем документ___(в разработке)
-
         if (Objects.isNull(newReport.getPhoto()) || Objects.isNull(newReport.getReportTextUnderPhoto())) {
             messageSender.sendMessage(chatId, postAttentionText);
         }
         reportTelegramRepository.save(newReport);
         return messageSender.sendMessage(chatId, postReportText);
     }
+
     @Override
     public ReportTelegram createTelegramReport(ReportTelegram reportTelegram) {
         reportTelegramRepository.save(reportTelegram);
@@ -126,24 +124,6 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
             return true;
         } else {
             throw new ReportNotFoundException();
-        }
-    }
-
-    /**
-     * Проверка на то, был ли отправлен сегодня отчет
-     */
-    public void checkIsFullReportPostToday(Long chatId, Update update) {
-        //можно тут проверить и запросить, чтобы отчет был введен полностью
-    }
-    @Scheduled(cron = "11 56 10 * * *")//сообщение отсылается всем пользователям каждый день (в 10 часов 56 мин 11 сек)
-    public void reportReminder() {
-        //ищем users у которых поле AdoptDate не ноль и ортправлем им сообщение-напоминание
-        List<ShelterUserTelegram> users = userRepository.findShelterUserByAdoptDateIsNotNull();
-        if (!users.isEmpty()) {
-            for (ShelterUserTelegram user : users) {
-                Long chatId = user.getChatId();
-                messageSender.sendMessage(chatId, reportReminderText);
-            }
         }
     }
 }
