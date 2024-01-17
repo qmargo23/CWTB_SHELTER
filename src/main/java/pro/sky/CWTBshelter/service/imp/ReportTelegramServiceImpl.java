@@ -22,10 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ReportTelegramServiceImpl implements ReportTelegramService {
@@ -33,8 +30,9 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
     private final String postReportTextToday_NoAnimal = "Бот не может принять Ваши данные, поскольку у Вас нет питомца взятого из нашего приюта.";
     private final String postAttentionText = "Для отчета необходимо отсылать  фото и описание. В следующий раз, пожалуйста, сделайте фото и описание вашего подопечного!";
     private final String postReportText = "Отчет отправлен, пожалуйста, не забывайте отправлять отчеты о вашем питомце ежедневно.";
-    private final String reportReminderText = "Сегодня надо прислать отчет о жизни вашего питомца!";
     private final String postReportTodayText = "Сегодня надо прислать отчет о жизни вашего питомца, пожалуйста,\n не забывайте отправлять отчеты о вашем питомце ежедневно.";
+    private final String postReportTwoDaysText = "Вы не присылали отчет уже 2 дня...";
+
 
     private final TelegramBot telegramBot;
     private final ShelterUserTelegramRepository userRepository;
@@ -129,7 +127,7 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
         }
     }
 
-    @Scheduled(cron = "0 00 10 * * * *")//сообщение-напоминание отсылается всем пользователям каждый день в 10
+    @Scheduled(cron = "0 00 10 * * *")//сообщение-напоминание отсылается всем пользователям каждый день в 10
     public void reportReminder() {
         List<ShelterUserTelegram> users = userRepository.findSheltersUserTelegramByAdoptDateIsNotNull();
         if (!users.isEmpty()) {
@@ -139,4 +137,32 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
             }
         }
     }
+    @Scheduled(cron = "0 00 15 * * *")
+    public void reportReminderTwoDays() {
+
+        List<ShelterUserTelegram> users = userRepository.findSheltersUserTelegramByAdoptDateIsNotNull();
+        if (!users.isEmpty()) {
+            for (ShelterUserTelegram user : users) {
+                Long chatId = user.getChatId();
+                //Сортируем, ищем последний отчет!
+                Optional<ReportTelegram> report = reportTelegramRepository.findBySheltersUserId(
+                                user.getId())
+                        .stream()
+                        .sorted(Comparator.comparing(ReportTelegram::getLocalDate))
+                        .reduce((x, y) -> y);
+
+                if (report.isPresent()) {
+                    //прибавили к дате последнего отчета 2 дня
+                    LocalDate reportDate = report.get().getLocalDate().plusDays(2);
+                    LocalDate currentDate = LocalDate.now();
+                    //сравниваем с текущей датой, если больше, значит отчет старый
+                    if (currentDate.isAfter(reportDate)) {
+                        messageSender.sendMessage(chatId, postReportTwoDaysText);
+                    }
+                }
+            }
+        }
+    }
+
+
 }
