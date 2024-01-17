@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetFileResponse;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import pro.sky.CWTBshelter.exception.ReportNotFoundException;
@@ -33,6 +34,7 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
     private final String postAttentionText = "Для отчета необходимо отсылать  фото и описание. В следующий раз, пожалуйста, сделайте фото и описание вашего подопечного!";
     private final String postReportText = "Отчет отправлен, пожалуйста, не забывайте отправлять отчеты о вашем питомце ежедневно.";
     private final String reportReminderText = "Сегодня надо прислать отчет о жизни вашего питомца!";
+    private final String postReportTodayText = "Сегодня надо прислать отчет о жизни вашего питомца, пожалуйста,\n не забывайте отправлять отчеты о вашем питомце ежедневно.";
 
     private final TelegramBot telegramBot;
     private final ShelterUserTelegramRepository userRepository;
@@ -124,6 +126,17 @@ public class ReportTelegramServiceImpl implements ReportTelegramService {
             return true;
         } else {
             throw new ReportNotFoundException();
+        }
+    }
+
+    @Scheduled(cron = "0 00 10 * * * *")//сообщение-напоминание отсылается всем пользователям каждый день в 10
+    public void reportReminder() {
+        List<ShelterUserTelegram> users = userRepository.findSheltersUserTelegramByAdoptDateIsNotNull();
+        if (!users.isEmpty()) {
+            for (ShelterUserTelegram user : users) {
+                Long chatId = user.getChatId();
+                messageSender.sendMessage(chatId, postReportTodayText);
+            }
         }
     }
 }
