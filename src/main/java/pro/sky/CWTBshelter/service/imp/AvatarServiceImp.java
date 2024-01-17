@@ -21,7 +21,6 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional
-
 public class AvatarServiceImp implements AvatarService {
     @Value("avatars")
     private String avatarsDir;

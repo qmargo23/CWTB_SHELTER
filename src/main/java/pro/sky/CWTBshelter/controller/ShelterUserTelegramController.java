@@ -93,7 +93,7 @@ public class ShelterUserTelegramController {
         if (editShelterUser == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(shelterUser);
+            return ResponseEntity.ok(editShelterUser);
         }
     }
 
@@ -105,7 +105,7 @@ public class ShelterUserTelegramController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     public ResponseEntity<Void> deleteShelterUserTelegram(@Parameter(description = "Идентификатор пользователя", example = "1")
-                                                  @PathVariable long id) {
+                                                          @PathVariable long id) {
         if (service.removeById(id)) {
             return ResponseEntity.ok().build();
         }
