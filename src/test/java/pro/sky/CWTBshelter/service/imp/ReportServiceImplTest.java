@@ -36,8 +36,8 @@ class ReportServiceImplTest {
     private ReportServiceImpl reportService;
     @BeforeEach
     public void beforeEach(){
-        Report reportTest = new Report(1L,"Фото",LocalDate.of(2023,1,1),
-                "Текст под под фото");
+      Report reportTest = new Report(1L,"Фото",LocalDate.of(2023,1,1),
+              "Текст под под фото");
         lenient().when(reportRepository.findById(1L)).thenReturn(Optional.of(reportTest));
 
     }
@@ -80,7 +80,7 @@ class ReportServiceImplTest {
 
         Report actual = reportService.updateReport(1L,request);
 
-        Assertions.assertEquals(expected,actual);
+       Assertions.assertEquals(expected,actual);
     }
 
     @Test
