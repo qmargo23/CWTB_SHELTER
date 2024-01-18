@@ -32,7 +32,6 @@ public class MenuServiceImp implements MenuService {
             " \nпри неправильном заполнении отчета, наш волонтер свяжется с Вами и поможет.";
 
 
-    //кнопки быстрого доступа к меню
     private final String Button1 = "Выбрать приют";
     private final String Button2 = "Забрать питомца";
     private final String Button3 = "Сдать отчет";
@@ -188,7 +187,7 @@ public class MenuServiceImp implements MenuService {
                 })
                 .resizeKeyboard(true)
                 .selective(true);
-// посылаем приветсвенное сообщение + меню-кнопки внизу
+
         SendMessage request = new SendMessage(update.message().chat().id(), greetingFirstMessageText)
                 .replyMarkup(keyboard);
         telegramBot.execute(request);

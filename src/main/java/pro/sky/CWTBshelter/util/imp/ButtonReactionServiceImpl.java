@@ -35,7 +35,9 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
     public ButtonReactionServiceImpl(TelegramBot telegramBot,
                                      MessageSender messageSender,
                                      MenuService menuService,
-                                     ShelterInfoRepository shelterInfoRepository, AnimalRepository animalRepository, AvatarRepository avatarRepository) {
+                                     ShelterInfoRepository shelterInfoRepository,
+                                     AnimalRepository animalRepository,
+                                     AvatarRepository avatarRepository) {
         this.telegramBot = telegramBot;
         this.messageSender = messageSender;
         this.menuService = menuService;
@@ -49,17 +51,13 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
     public SendMessage buttonReaction(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.message().chat().id();
         String data = callbackQuery.data();
-
-        //dataRequest - данные пришедшие при нажатии кнопок
         CallbackDataRequest dataRequest = CallbackDataRequest.getConstantByRequest(data);
-        //shelterInfoOptional - работа с нужной строкой (приютами) в БД
         Optional<ShelterInfo> shelterInfoOptional;
 
         if (isCat) {
             shelterInfoOptional = shelterInfoRepository.findById(2L);//cats
         } else shelterInfoOptional = shelterInfoRepository.findById(1L);//dogs
 
-        //проверка значений для dataRequest
         switch (dataRequest) {
             case CAT:
                 isCat = true;
@@ -69,7 +67,6 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
                 return menuService.getDogMenu(chatId);//создадим menu-сообщение для приюта dog
             case HELP:
                 return messageSender.sendMessage(chatId, "Воспользуйтесь командой /help");
-
             //________________ADOPT_MENU________________
             case ADOPT_MENU:
                 if (isCat) {
@@ -120,20 +117,18 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
                 return messageSender.sendMessage(chatId, dogs);
 
             //________________GET_SHELTER_MENU________________
-            case GET_SHELTER_MENU://это общее меню для приюта кошек и собак!
-// можно сюда "воткнуть" приветсвие пользователя
-//messageSender.sendMessage(chatId, "HELLO ");
+            case GET_SHELTER_MENU:
                 return menuService.getShelterInfoMenu(chatId);
             //________________getShelterInfoMenu________________
-            case ABOUT_SHELTER://Рассказать о приюте.
+            case ABOUT_SHELTER:
                 if (shelterInfoOptional.isPresent()) {
                     return messageSender.sendMessage(chatId, shelterInfoOptional.get().getAboutShelter());
                 }
-            case WORKING_HOURS://Выдать расписание работы приюта и адрес.
+            case WORKING_HOURS:
                 if (shelterInfoOptional.isPresent()) {
                     return messageSender.sendMessage(chatId, shelterInfoOptional.get().getAddressSchedule());
                 }
-            case LOCATION_MAP://"Показать схему проезда
+            case LOCATION_MAP:
                 if (shelterInfoOptional.isEmpty()) {
                     return null;
                 }
@@ -145,15 +140,14 @@ public class ButtonReactionServiceImpl implements ButtonReactionService {
                 telegramBot.execute(sendPhoto);
                 return null;
 
-            case SECURITY_CONTACT://Оформить пропуск на машину.
+            case SECURITY_CONTACT:
                 if (shelterInfoOptional.isPresent()) {
                     return messageSender.sendMessage(chatId, shelterInfoOptional.get().getContactForCarPass());
                 }
-            case SAFETY_RECOMMENDATIONS://Рекомендации пребывания на территории приюта.
+            case SAFETY_RECOMMENDATIONS:
                 if (shelterInfoOptional.isPresent()) {
                     return messageSender.sendMessage(chatId, shelterInfoOptional.get().getSafetyOnTerritory());
                 }
-
             default:
                 return messageSender.sendMessage(chatId, "КОД ЭТОЙ КНОПКИ ЕЩЕ НЕ НАПИСАН");
         }

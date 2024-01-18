@@ -43,13 +43,10 @@ public class HandlerServiceImpl implements HandlerService {
     public void messageHandler(Update update) {
         Long chatId = update.message().chat().id();
         String userText = update.message().text();
-        //ищем user в БД
         Optional<ShelterUserTelegram> user = userRepository.findSheltersUserTelegramByChatId(chatId);
 
-        //блок проверки на ввод номера телефона!
         if (user.isPresent()) {
             Long id = user.get().getId();
-            // setPhoneNumber - проверка
             boolean phoneNumber = userService.setPhoneNumber(id, userText);
             if (phoneNumber) {
                 messageSender.sendMessage(chatId, SAVENUMBERTEXT);
@@ -57,34 +54,29 @@ public class HandlerServiceImpl implements HandlerService {
         }
 
         if ("/start".equals(userText) || "Выбрать приют".equals(userText)) {
-// перенесла выше           Optional<ShelterUser> user = userRepository.findSheltersUserByChatId(chatId);
-            //регистрируем и приветствуем нового пользователя приюта
             if (user.isEmpty()) {
                 ShelterUserTelegram regUser = new ShelterUserTelegram();
                 regUser.setChatId(chatId);
                 regUser.setBotState(BotState.START);
                 regUser.setShelterUserType(JUST_LOOKING);
-                //можно пропустить этот блок/ возможно заполнение волонтером
+
                 regUser.setUserName(update.message().chat().firstName());
                 regUser.setUserSurname(update.message().chat().lastName());
-                //добавляем нового пользователя в БД shelter_user_telegram
+
                 userService.add(regUser);
-                //приветствуем нового пользователя//+//установка "меню-кнопки" при  регистрации
+
                 String greetingFirstMessageText = "Привет!!! " + update.message().chat().firstName() + "!\n" + StartText;
                 menuService.setButtonKeyboard(update, greetingFirstMessageText);
             }
-            //вызов старт-меню /выбор приюта  с двумя кнопками
             menuService.getStartMenuShelter(chatId);
         }
         if ("/help".equals(userText) || "Помощь".equals(userText)) {
             messageSender.sendMessage(chatId, helpText);
         }
         if ("/adopt".equals(userText) || "Забрать питомца".equals(userText)) {
-            //на данном этапе в разработке 
             menuService.getAdoptMenuShelter(chatId);
         }
         if ("/report".equals(userText) || "Сдать отчет".equals(userText)) {
-            //проверка: если у user есть животное
             if (user.get().getAnimal() != null) {
                 menuService.getReportMenuShelter(chatId);
             } else
