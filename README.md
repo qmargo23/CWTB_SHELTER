@@ -61,6 +61,18 @@
 
 ###
 
-<p align="left">To start working with the bot, you will need to install <a href=" https://telegram.org/apps ">Telegram application</a>. After installation and registration, you will be able to find us by name @ShelterTeamBot.</p>
+To start working with the bot, you will need to install [Telegram app](https://telegram.org/apps) . After installation and registration, you will be able to find us by name [@ShelterTeamBot](https://t.me/ShelterTeamBot).
+
+###
+
+### Authors of the project
+
+[Nikolay](https://github.com/kalchurrrrr)
+
+[Elena](https://github.com/qmargo23)
+
+[Yuriy](https://github.com/yuzu-original)
+
+[Miroslav](https://github.com/Luckymirik)
 
 ###
