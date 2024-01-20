@@ -36,4 +36,5 @@ public class Avatar {
     private byte[] data;
     @OneToOne
     private ShelterInfo shelterInfo;
+
 }

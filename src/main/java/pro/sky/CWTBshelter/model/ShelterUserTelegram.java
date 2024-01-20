@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 /**
- *класс ShelterUserTelegram - сущность описывающая пользователя телеграм-бота.
+ * класс ShelterUserTelegram - сущность описывающая пользователя телеграм-бота.
  * Содержит геттеры, сеттеры, переопределены equals,
  * hashCode и toString
  * содержит следующие поля:
@@ -33,6 +33,7 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "shelter_user_telegram")
 public class ShelterUserTelegram {

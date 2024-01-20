@@ -15,11 +15,8 @@ public enum ShelterUserType {
     /**
      * Испытательный срок продлен на 14 дней
      */
-    PROBATION_EXTEND_14,
-    /**
-     * Испытательный срок продлен на 30 дней
-     */
-    PROBATION_EXTEND_30,
+    PROBATION_EXTEND,
+
     /**
      * Успешно прошел испытательный срок
      */
